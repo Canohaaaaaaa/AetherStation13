@@ -447,15 +447,16 @@ or shoot a gun to move around via Newton's 3rd Law of Motion."
 		return
 
 	var/datum/antagonist/cult/antag = owner.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/team/cult/bloodcult/cult_team = antag.cult_team
 	if(!antag)
 		return
 	var/datum/objective/sacrifice/sac_objective = locate() in antag.cult_team.objectives
 
-	if(antag.cult_team.blood_target)
-		if(!get_turf(antag.cult_team.blood_target))
-			antag.cult_team.blood_target = null
+	if(cult_team.blood_target)
+		if(!get_turf(cult_team.blood_target))
+			cult_team.blood_target = null
 		else
-			blood_target = antag.cult_team.blood_target
+			blood_target = cult_team.blood_target
 	if(Cviewer?.seeking && Cviewer.master)
 		blood_target = Cviewer.master
 		desc = "Your blood sense is leading you to [Cviewer.master]"

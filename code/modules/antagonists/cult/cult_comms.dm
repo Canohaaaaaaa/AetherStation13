@@ -270,32 +270,32 @@
 	if(!isturf(T))
 		return FALSE
 
-	var/datum/antagonist/cult/C = caller.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
-
+	var/datum/antagonist/cult/bloodcult/C = caller.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/team/cult/bloodcult/cult_team = C.cult_team
 	if(target in view(7, get_turf(ranged_ability_user)))
-		if(C.cult_team.blood_target)
+		if(cult_team.blood_target)
 			to_chat(ranged_ability_user, span_cult("The cult has already designated a target!"))
 			return FALSE
-		C.cult_team.blood_target = target
+		cult_team.blood_target = target
 		var/area/A = get_area(target)
 		attached_action.cooldown = world.time + attached_action.base_cooldown
 		addtimer(CALLBACK(attached_action.owner, /mob.proc/update_action_buttons_icon), attached_action.base_cooldown)
-		C.cult_team.blood_target_image = image('icons/effects/mouse_pointers/cult_target.dmi', target, "glow", ABOVE_MOB_LAYER)
-		C.cult_team.blood_target_image.appearance_flags = RESET_COLOR
-		C.cult_team.blood_target_image.pixel_x = -target.pixel_x
-		C.cult_team.blood_target_image.pixel_y = -target.pixel_y
+		cult_team.blood_target_image = image('icons/effects/mouse_pointers/cult_target.dmi', target, "glow", ABOVE_MOB_LAYER)
+		cult_team.blood_target_image.appearance_flags = RESET_COLOR
+		cult_team.blood_target_image.pixel_x = -target.pixel_x
+		cult_team.blood_target_image.pixel_y = -target.pixel_y
 		for(var/datum/mind/B as anything in get_antag_minds(/datum/antagonist/cult))
 			if(B.current && B.current.stat != DEAD && B.current.client)
-				to_chat(B.current, span_cultlarge("<b>[ranged_ability_user] has marked [C.cult_team.blood_target] in the [A.name] as the cult's top priority, get there immediately!</b>"))
+				to_chat(B.current, span_cultlarge("<b>[ranged_ability_user] has marked [cult_team.blood_target] in the [A.name] as the cult's top priority, get there immediately!</b>"))
 				SEND_SOUND(B.current, sound(pick('sound/hallucinations/over_here2.ogg','sound/hallucinations/over_here3.ogg'),0,1,75))
-				B.current.client.images += C.cult_team.blood_target_image
+				B.current.client.images += cult_team.blood_target_image
 		attached_action.owner.update_action_buttons_icon()
 		remove_ranged_ability(span_cult("The marking rite is complete! It will last for 90 seconds."))
-		C.cult_team.blood_target_reset_timer = addtimer(CALLBACK(GLOBAL_PROC, .proc/reset_blood_target,C.cult_team), 900, TIMER_STOPPABLE)
+		cult_team.blood_target_reset_timer = addtimer(CALLBACK(GLOBAL_PROC, .proc/reset_blood_target,cult_team), 900, TIMER_STOPPABLE)
 		return TRUE
 	return FALSE
 
-/proc/reset_blood_target(datum/team/cult/team)
+/proc/reset_blood_target(datum/team/cult/bloodcult/team)
 	for(var/datum/mind/B in team.members)
 		if(B.current && B.current.stat != DEAD && B.current.client)
 			if(team.blood_target)
@@ -339,12 +339,13 @@
 		to_chat(owner,span_cultbold("Your previous mark is gone - you are now ready to create a new blood mark."))
 
 /datum/action/innate/cult/ghostmark/Activate()
-	var/datum/antagonist/cult/C = owner.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
-	if(C.cult_team.blood_target)
+	var/datum/antagonist/cult/bloodcult/C = owner.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/team/cult/bloodcult/cult_team = C.cult_team
+	if(cult_team.blood_target)
 		if(cooldown>world.time)
-			reset_blood_target(C.cult_team)
+			reset_blood_target(cult_team)
 			to_chat(owner, span_cultbold("You have cleared the cult's blood target!"))
-			deltimer(C.cult_team.blood_target_reset_timer)
+			deltimer(cult_team.blood_target_reset_timer)
 			return
 		else
 			to_chat(owner, span_cultbold("The cult has already designated a target!"))
@@ -355,27 +356,27 @@
 	target = owner.orbiting?.parent || get_turf(owner)
 	if(!target)
 		return
-	C.cult_team.blood_target = target
+	cult_team.blood_target = target
 	var/area/A = get_area(target)
 	cooldown = world.time + base_cooldown
 	addtimer(CALLBACK(owner, /mob.proc/update_action_buttons_icon), base_cooldown)
-	C.cult_team.blood_target_image = image('icons/effects/mouse_pointers/cult_target.dmi', target, "glow", ABOVE_MOB_LAYER)
-	C.cult_team.blood_target_image.appearance_flags = RESET_COLOR
-	C.cult_team.blood_target_image.pixel_x = -target.pixel_x
-	C.cult_team.blood_target_image.pixel_y = -target.pixel_y
+	cult_team.blood_target_image = image('icons/effects/mouse_pointers/cult_target.dmi', target, "glow", ABOVE_MOB_LAYER)
+	cult_team.blood_target_image.appearance_flags = RESET_COLOR
+	cult_team.blood_target_image.pixel_x = -target.pixel_x
+	cult_team.blood_target_image.pixel_y = -target.pixel_y
 	SEND_SOUND(owner, sound(pick('sound/hallucinations/over_here2.ogg','sound/hallucinations/over_here3.ogg'),0,1,75))
-	owner.client.images += C.cult_team.blood_target_image
+	owner.client.images += cult_team.blood_target_image
 	for(var/datum/mind/B as anything in get_antag_minds(/datum/antagonist/cult))
 		if(B.current && B.current.stat != DEAD && B.current.client)
-			to_chat(B.current, span_cultlarge("<b>[owner] has marked [C.cult_team.blood_target] in the [A.name] as the cult's top priority, get there immediately!</b>"))
+			to_chat(B.current, span_cultlarge("<b>[owner] has marked [cult_team.blood_target] in the [A.name] as the cult's top priority, get there immediately!</b>"))
 			SEND_SOUND(B.current, sound(pick('sound/hallucinations/over_here2.ogg','sound/hallucinations/over_here3.ogg'),0,1,75))
-			B.current.client.images += C.cult_team.blood_target_image
+			B.current.client.images += cult_team.blood_target_image
 	to_chat(owner,span_cultbold("You have marked the [target] for the cult! It will last for [DisplayTimeText(base_cooldown)]."))
 	name = "Clear the Blood Mark"
 	desc = "Remove the Blood Mark you previously set."
 	button_icon_state = "emp"
 	owner.update_action_buttons_icon()
-	C.cult_team.blood_target_reset_timer = addtimer(CALLBACK(GLOBAL_PROC, .proc/reset_blood_target,C.cult_team), base_cooldown, TIMER_STOPPABLE)
+	cult_team.blood_target_reset_timer = addtimer(CALLBACK(GLOBAL_PROC, .proc/reset_blood_target, cult_team), base_cooldown, TIMER_STOPPABLE)
 	addtimer(CALLBACK(src, .proc/reset_button), base_cooldown)
 
 

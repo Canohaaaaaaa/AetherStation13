@@ -18,6 +18,7 @@
 #define ROLE_ALIEN "Xenomorph"
 #define ROLE_PAI "pAI"
 #define ROLE_CULTIST "Cultist"
+#define ROLE_CLOCK_CULTIST "Cultist" //TODO.. Update DB
 #define ROLE_HERETIC "Heretic"
 #define ROLE_BLOB "Blob"
 #define ROLE_NINJA "Space Ninja"

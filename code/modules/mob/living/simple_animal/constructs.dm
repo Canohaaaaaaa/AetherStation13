@@ -463,13 +463,14 @@
 	..()
 
 /datum/action/innate/seek_master/Activate()
-	var/datum/antagonist/cult/C = owner.mind.has_antag_datum(/datum/antagonist/cult)
+	var/datum/antagonist/cult/bloodcult/C = owner.mind.has_antag_datum(/datum/antagonist/cult/bloodcult)
 	if(!C)
 		return
-	var/datum/objective/eldergod/summon_objective = locate() in C.cult_team.objectives
+	var/datum/team/cult/bloodcult/cult_team = C.cult_team //Safe caste, clockcult can't make constructs
+	var/datum/objective/eldergod/summon_objective = locate() in cult_team.objectives
 
 	if(summon_objective.check_completion())
-		the_construct.master = C.cult_team.blood_target
+		the_construct.master = cult_team.blood_target
 
 	if(!the_construct.master)
 		to_chat(the_construct, "<span class='cult italic'>You have no master to seek!</span>")

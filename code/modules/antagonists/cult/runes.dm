@@ -223,7 +223,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/mob/living/L = pick(myriad_targets)
 
 	var/mob/living/F = invokers[1]
-	var/datum/antagonist/cult/C = F.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/antagonist/cult/bloodcult/C = F.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	var/datum/team/cult/Cult_team = C.cult_team
 	var/is_convertable = is_convertable_to_cult(L,C.cult_team)
 	if(L.stat != DEAD && is_convertable)
@@ -261,7 +261,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	convertee.visible_message("<span class='warning'>[convertee] writhes in pain \
 	[brutedamage || burndamage ? "even as [convertee.p_their()] wounds heal and close" : "as the markings below [convertee.p_them()] glow a bloody red"]!</span>", \
 	span_cultlarge("<i>AAAAAAAAAAAAAA-</i>"))
-	convertee.mind?.add_antag_datum(/datum/antagonist/cult)
+	convertee.mind?.add_antag_datum(/datum/antagonist/cult/bloodcult)
 	convertee.Unconscious(100)
 	new /obj/item/melee/cultblade/dagger(get_turf(src))
 	convertee.mind.special_role = ROLE_CULTIST
@@ -282,7 +282,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/mob/living/first_invoker = invokers[1]
 	if(!first_invoker)
 		return FALSE
-	var/datum/antagonist/cult/C = first_invoker.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/antagonist/cult/bloodcult/C = first_invoker.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	if(!C)
 		return
 
@@ -506,7 +506,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	if(!is_station_level(z))
 		return
 	var/mob/living/user = invokers[1]
-	var/datum/antagonist/cult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
 	var/area/place = get_area(src)
 	if(!(place in summon_objective.summon_spots))
@@ -661,7 +661,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 /obj/effect/rune/summon/invoke(list/invokers)
 	var/mob/living/user = invokers[1]
 	var/list/cultists = list()
-	for(var/datum/mind/M as anything in get_antag_minds(/datum/antagonist/cult))
+	for(var/datum/mind/M as anything in get_antag_minds(/datum/antagonist/cult/bloodcult))
 		if(!(M.current in invokers) && M.current && M.current.stat != DEAD)
 			cultists |= M.current
 	var/mob/living/cultist_to_summon = input(user, "Who do you wish to call to [src]?", "Followers of the Geometer") as null|anything in cultists
@@ -826,7 +826,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		to_chat(user, span_cultitalic("Your blood begins flowing into [src]. You must remain in place and conscious to maintain the forms of those summoned. This will hurt you slowly but surely..."))
 		var/obj/structure/emergency_shield/cult/weak/N = new(T)
 		new_human.key = ghost_to_spawn.key
-		new_human.mind?.add_antag_datum(/datum/antagonist/cult)
+		new_human.mind?.add_antag_datum(/datum/antagonist/cult/bloodcult)
 		to_chat(new_human, span_cultitalic("<b>You are a servant of the Geometer. You have been made semi-corporeal by the cult of Nar'Sie, and you are to serve them at all costs.</b>"))
 
 		while(!QDELETED(src) && !QDELETED(user) && !QDELETED(new_human) && (user in T))
@@ -904,7 +904,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	. = ..()
 	var/area/place = get_area(src)
 	var/mob/living/user = invokers[1]
-	var/datum/antagonist/cult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
 	if(summon_objective.summon_spots.len <= 1)
 		to_chat(user, span_cultlarge("Only one ritual site remains - it must be reserved for the final summoning!"))

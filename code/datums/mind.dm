@@ -438,7 +438,7 @@
 
 /datum/mind/proc/enslave_mind_to_creator(mob/living/creator)
 	if(IS_CULTIST(creator))
-		add_antag_datum(/datum/antagonist/cult)
+		add_antag_datum(has_antag_datum(/datum/antagonist/cult)) //TODO.. this is 100% going to break
 
 	else if(IS_REVOLUTIONARY(creator))
 		var/datum/antagonist/rev/converter = creator.mind.has_antag_datum(/datum/antagonist/rev,TRUE)

@@ -1755,6 +1755,8 @@
 #include "code\modules\antagonists\cult\ritual.dm"
 #include "code\modules\antagonists\cult\rune_spawn_action.dm"
 #include "code\modules\antagonists\cult\runes.dm"
+#include "code\modules\antagonists\cult\bloodcult\bloodcult.dm"
+#include "code\modules\antagonists\cult\clockcult\clockcult.dm"
 #include "code\modules\antagonists\disease\disease_abilities.dm"
 #include "code\modules\antagonists\disease\disease_datum.dm"
 #include "code\modules\antagonists\disease\disease_disease.dm"

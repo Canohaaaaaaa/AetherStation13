@@ -642,7 +642,7 @@
 	if(istype(A, /obj/item))
 
 		var/list/cultists = list()
-		for(var/datum/mind/M as anything in get_antag_minds(/datum/antagonist/cult))
+		for(var/datum/mind/M as anything in get_antag_minds(/datum/antagonist/cult/bloodcult))
 			if(M.current && M.current.stat != DEAD)
 				cultists |= M.current
 		var/mob/living/cultist_to_receive = input(user, "Who do you wish to call to [src]?", "Followers of the Geometer") as null|anything in (cultists - user)

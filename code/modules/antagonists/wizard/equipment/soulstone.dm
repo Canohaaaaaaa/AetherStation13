@@ -14,7 +14,7 @@
 	/// This controls the color of the soulstone as well as restrictions for who can use it. THEME_CULT is red and is the default of cultist THEME_WIZARD is purple and is the default of wizard and THEME_HOLY is for purified soul stone
 	var/theme = THEME_CULT
 	/// Role check, if any needed
-	var/required_role = /datum/antagonist/cult
+	var/required_role = /datum/antagonist/cult/bloodcult
 
 /obj/item/soulstone/proc/role_check(mob/who)
 	return required_role ? (who.mind && who.mind.has_antag_datum(required_role, TRUE)) : TRUE
@@ -216,7 +216,7 @@
 
 		if("VICTIM")
 			var/mob/living/carbon/human/T = target
-			var/datum/antagonist/cult/C = user.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+			var/datum/antagonist/cult/bloodcult/C = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 			if(C?.cult_team.is_sacrifice_target(T.mind))
 				to_chat(user, span_cult("<b>\"This soul is mine.</b></span> <span class='cultlarge'>SACRIFICE THEM!\""))
 				return FALSE
@@ -243,7 +243,7 @@
 				T.AddComponent(/datum/component/soulstoned, src)
 				if(theme == THEME_HOLY)
 					icon_state = "purified_soulstone2"
-					T.mind?.remove_antag_datum(/datum/antagonist/cult)
+					T.mind?.remove_antag_datum(/datum/antagonist/cult/bloodcult)
 				if(theme == THEME_WIZARD)
 					icon_state = "mystic_soulstone2"
 				if(theme == THEME_CULT)
@@ -261,7 +261,7 @@
 				if(!T || !T.loc)
 					return
 				make_new_construct_from_class(construct_class, theme, A, user, FALSE, T.loc)
-				A.mind?.remove_antag_datum(/datum/antagonist/cult)
+				A.mind?.remove_antag_datum(/datum/antagonist/cult/bloodcult)
 				qdel(T)
 				qdel(src)
 			else
@@ -323,7 +323,7 @@
 	newstruct.key = target.key
 	var/atom/movable/screen/alert/bloodsense/BS
 	if(newstruct.mind && ((stoner && IS_CULTIST(stoner)) || cultoverride) && SSticker?.mode)
-		newstruct.mind.add_antag_datum(/datum/antagonist/cult)
+		newstruct.mind.add_antag_datum(/datum/antagonist/cult/bloodcult)
 	if(IS_CULTIST(stoner) || cultoverride)
 		to_chat(newstruct, "<b>You are still bound to serve the cult[stoner ? " and [stoner]":""], follow [stoner ? stoner.p_their() : "their"] orders and help [stoner ? stoner.p_them() : "them"] complete [stoner ? stoner.p_their() : "their"] goals at all costs.</b>")
 	else if(stoner)
@@ -355,7 +355,7 @@
 	if(user)
 		S.faction |= "[REF(user)]" //Add the master as a faction, allowing inter-mob cooperation
 	if(user && IS_CULTIST(user))
-		S.mind.add_antag_datum(/datum/antagonist/cult)
+		S.mind.add_antag_datum(/datum/antagonist/cult/bloodcult)
 	S.cancel_camera()
 	name = "soulstone: Shade of [T.real_name]"
 	switch(theme)

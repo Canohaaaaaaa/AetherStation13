@@ -60,7 +60,7 @@ This file contains the cult dagger and rune list code
 	var/entered_rune_name
 	var/list/shields = list()
 	var/area/A = get_area(src)
-	var/datum/antagonist/cult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
+	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	if(!user_antag)
 		return
 	if(!check_rune_turf(Turf, user))
