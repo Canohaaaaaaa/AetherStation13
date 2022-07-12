@@ -1047,33 +1047,33 @@
 	turf_type = /turf/open/floor/eighties/red
 	merge_type = /obj/item/stack/tile/eighties/red
 
-/obj/item/stack/tile/bronze
+/obj/item/stack/tile/clockcult
 	name = "bronze tile"
 	singular_name = "bronze floor tile"
 	desc = "A clangy tile made of high-quality bronze. Clockwork construction techniques allow the clanging to be minimized."
 	icon_state = "tile_brass"
-	turf_type = /turf/open/floor/bronze
+	turf_type = /turf/open/floor/clockcult
 	mats_per_unit = list(/datum/material/bronze=500)
-	merge_type = /obj/item/stack/tile/bronze
+	merge_type = /obj/item/stack/tile/clockcult
 	tile_reskin_types = list(
-		/obj/item/stack/tile/bronze,
-		/obj/item/stack/tile/bronze/flat,
-		/obj/item/stack/tile/bronze/filled,
+		/obj/item/stack/tile/clockcult,
+		/obj/item/stack/tile/clockcult/flat,
+		/obj/item/stack/tile/clockcult/filled,
 		)
 
-/obj/item/stack/tile/bronze/flat
+/obj/item/stack/tile/clockcult/flat
 	name = "flat bronze tile"
 	singular_name = "flat bronze floor tile"
 	icon_state = "tile_reebe"
-	turf_type = /turf/open/floor/bronze/flat
-	merge_type = /obj/item/stack/tile/bronze/flat
+	turf_type = /turf/open/floor/clockcult/flat
+	merge_type = /obj/item/stack/tile/clockcult/flat
 
-/obj/item/stack/tile/bronze/filled
+/obj/item/stack/tile/clockcult/filled
 	name = "filled bronze tile"
 	singular_name = "filled bronze floor tile"
 	icon_state = "tile_brass_filled"
-	turf_type = /turf/open/floor/bronze/filled
-	merge_type = /obj/item/stack/tile/bronze/filled
+	turf_type = /turf/open/floor/clockcult/filled
+	merge_type = /obj/item/stack/tile/clockcult/filled
 
 /obj/item/stack/tile/cult
 	name = "engraved tile"

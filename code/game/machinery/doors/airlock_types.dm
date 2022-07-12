@@ -292,14 +292,14 @@
 	opacity = FALSE
 	glass = TRUE
 
-/obj/machinery/door/airlock/bronze
+/obj/machinery/door/airlock/clockcult
 	name = "bronze airlock"
 	icon = 'icons/obj/doors/airlocks/clockwork/pinion_airlock.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/clockwork/overlays.dmi'
-	assemblytype = /obj/structure/door_assembly/door_assembly_bronze
+	assemblytype = /obj/structure/door_assembly/door_assembly_clockcult
 
-/obj/machinery/door/airlock/bronze/seethru
-	assemblytype = /obj/structure/door_assembly/door_assembly_bronze/seethru
+/obj/machinery/door/airlock/clockcult/seethru
+	assemblytype = /obj/structure/door_assembly/door_assembly_clockcult/seethru
 	opacity = FALSE
 	glass = TRUE
 //////////////////////////////////

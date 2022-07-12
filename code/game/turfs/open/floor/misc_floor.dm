@@ -138,25 +138,25 @@
 	floor_tile = /obj/item/stack/tile/sepia
 
 
-/turf/open/floor/bronze
+/turf/open/floor/clockcult
 	name = "bronze floor"
 	desc = "Some heavy bronze tiles."
 	icon_state = "clockwork_floor"
-	floor_tile = /obj/item/stack/tile/bronze
+	floor_tile = /obj/item/stack/tile/clockcult
 
-/turf/open/floor/bronze/flat
+/turf/open/floor/clockcult/flat
 	icon_state = "reebe"
-	floor_tile = /obj/item/stack/tile/bronze/flat
+	floor_tile = /obj/item/stack/tile/clockcult/flat
 
-/turf/open/floor/bronze/filled
+/turf/open/floor/clockcult/filled
 	icon = 'icons/obj/clockwork_objects.dmi'
-	floor_tile = /obj/item/stack/tile/bronze/filled
+	floor_tile = /obj/item/stack/tile/clockcult/filled
 
-/turf/open/floor/bronze/filled/lavaland
+/turf/open/floor/clockcult/filled/lavaland
 	planetary_atmos = TRUE
 	initial_gas_mix = LAVALAND_DEFAULT_ATMOS
 
-/turf/open/floor/bronze/filled/icemoon
+/turf/open/floor/clockcult/filled/icemoon
 	planetary_atmos = TRUE
 	initial_gas_mix = ICEMOON_DEFAULT_ATMOS
 

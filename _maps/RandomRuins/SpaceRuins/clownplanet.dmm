@@ -8,11 +8,11 @@
 	},
 /area/ruin/powered/clownplanet)
 "ac" = (
-/turf/open/floor/bronze,
+/turf/open/floor/clockcult,
 /area/ruin/powered/clownplanet)
 "ad" = (
 /obj/structure/flora/rock/pile,
-/turf/open/floor/bronze,
+/turf/open/floor/clockcult,
 /area/ruin/powered/clownplanet)
 "ae" = (
 /turf/closed/indestructible/rock{
@@ -202,7 +202,7 @@
 "aN" = (
 /obj/structure/mineral_door/sandstone,
 /obj/structure/barricade/wooden/crude,
-/turf/open/floor/bronze,
+/turf/open/floor/clockcult,
 /area/ruin/powered/clownplanet)
 "aO" = (
 /obj/structure/flora/rock/pile,

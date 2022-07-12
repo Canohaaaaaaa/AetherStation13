@@ -412,14 +412,14 @@
 			return TRUE
 	return FALSE
 
-/obj/structure/girder/bronze
+/obj/structure/girder/clockcult
 	name = "wall gear"
 	desc = "A girder made out of sturdy bronze, made to resemble a gear."
 	icon = 'icons/obj/clockwork_objects.dmi'
 	icon_state = "wall_gear"
 	can_displace = FALSE
 
-/obj/structure/girder/bronze/attackby(obj/item/W, mob/living/user, params)
+/obj/structure/girder/clockcult/attackby(obj/item/W, mob/living/user, params)
 	add_fingerprint(user)
 	if(W.tool_behaviour == TOOL_WELDER)
 		if(!W.tool_start_check(user, amount = 0))
@@ -443,7 +443,7 @@
 			user.visible_message(span_notice("[user] plates [src] with bronze!"), span_notice("You construct a bronze wall."))
 			B.use(2)
 			var/turf/T = get_turf(src)
-			T.PlaceOnTop(/turf/closed/wall/mineral/bronze)
+			T.PlaceOnTop(/turf/closed/wall/mineral/clockcult)
 			qdel(src)
 
 	else
