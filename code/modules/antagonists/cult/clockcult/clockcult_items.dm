@@ -6,7 +6,6 @@
 /obj/item/spear/clockwork
 	icon = 'icons/obj/clockwork_objects.dmi'
 	icon_state = "ratvarian_spear" //TODO.. find sprites to make this an ACTUAL spear
-	actions_types = list(/datum/action/item_action/clockwork/bogus)
 	var/datum/action/item_action/clockwork/stored_spell
 
 /obj/item/spear/clockwork/Initialize()
@@ -15,14 +14,14 @@
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL_ATTEMPT, /proc/clockwork_spellweaver)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
-/obj/item/spear/clockwork/proc/spell_link(spell)
+/obj/item/spear/clockwork/proc/spell_link(source, spell)
 	//TODO.. add enchanted sprite
 	stored_spell = spell
+	actions_types += spell
 
 /obj/item/spear/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
-	stored_spell = actions[1] //TODO.. remove this
 	if(!stored_spell)
-		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+		return COMPONENT_SECONDARY_CALL_NORMAL_ATTACK_CHAIN
 	stored_spell.spell_trigger(target)
 	return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
 

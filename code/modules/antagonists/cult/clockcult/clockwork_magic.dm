@@ -4,10 +4,9 @@
 )
 
 ///Attempts to weave a spell into the item (I should have made this entire thing a component in hindsight)
-/proc/clockwork_spellweaver(obj/item/target_item, datum/action/item_action/clockwork/choosen_spell)
-	if(!(locate(target_item.type) in CLOCKWORK_ITEM_WHITELIST))
-		return
-	var/datum/action/item_action/clockwork/spell = new(choosen_spell)
+/proc/clockwork_spellweaver(obj/item/target_item, datum/action/item_action/clockwork/choosen_spell, mob/owner)
+	var/datum/action/item_action/clockwork/spell = new choosen_spell(target_item)
+	ower.Grant(spell)
 	SEND_SIGNAL(target_item, COMSIG_ITEM_WEAVE_SPELL, spell)
 
 /datum/action/innate/cult/clockwork
@@ -26,8 +25,10 @@
 /datum/action/innate/cult/clockwork/Activate()
 	. = ..()
 	var/obj/item/target_item = owner.get_active_held_item()
+	if(!(target_item.type in CLOCKWORK_ITEM_WHITELIST))
+		return
 	var/spell_choice = input("Pick a spell to weave.", "Clockwork spells") as null|anything in CLOCKWORK_SPELL_LIST
-	clockwork_spellweaver(target_item, spell_choice)
+	clockwork_spellweaver(target_item, spell_choice, owner)
 
 //** Spells bound to items, yet not casted by the UI button, instead the button represents the current cooldown and works as a tip
 /datum/action/item_action/clockwork
