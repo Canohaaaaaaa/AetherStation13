@@ -92,7 +92,7 @@
 	set_antag_hud(current, "cultmaster")
 
 /datum/antagonist/cult/master/bloodcult/greet()
-	to_chat(owner.current, "<span class='warningplain'><span class='cultlarge'>You are the cult's Master</span>. As the cult's Master, you have a unique title and loud voice when communicating, are capable of marking \
+	to_chat(owner.current, "<span class='warningplain'><span class='bloodcultlarge'>You are the cult's Master</span>. As the cult's Master, you have a unique title and loud voice when communicating, are capable of marking \
 	targets, such as a location or a noncultist, to direct the cult to them, and, finally, you are capable of summoning the entire living cult to your location <b><i>once</i></b>. Use these abilities to direct the cult to victory at any cost.</span>")
 
 /datum/antagonist/cult/master/bloodcult/apply_innate_effects(mob/living/mob_override)

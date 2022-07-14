@@ -110,15 +110,15 @@
 			if(src != user)
 				Beam(user, icon_state="sendbeam", time = 4)
 				user.visible_message(span_danger("[user] repairs some of \the <b>[src]'s</b> dents."), \
-						   span_cult("You repair some of <b>[src]'s</b> dents, leaving <b>[src]</b> at <b>[health]/[maxHealth]</b> health."))
+						   span_bloodcult("You repair some of <b>[src]'s</b> dents, leaving <b>[src]</b> at <b>[health]/[maxHealth]</b> health."))
 			else
 				user.visible_message(span_danger("[user] repairs some of [p_their()] own dents."), \
-						   span_cult("You repair some of your own dents, leaving you at <b>[user.health]/[user.maxHealth]</b> health."))
+						   span_bloodcult("You repair some of your own dents, leaving you at <b>[user.health]/[user.maxHealth]</b> health."))
 		else
 			if(src != user)
-				to_chat(user, span_cult("You cannot repair <b>[src]'s</b> dents, as [p_they()] [p_have()] none!"))
+				to_chat(user, span_bloodcult("You cannot repair <b>[src]'s</b> dents, as [p_they()] [p_have()] none!"))
 			else
-				to_chat(user, span_cult("You cannot repair your own dents, as you have none!"))
+				to_chat(user, span_bloodcult("You cannot repair your own dents, as you have none!"))
 	else if(src != user)
 		return ..()
 
@@ -432,7 +432,7 @@
 				return ..()
 			C.Paralyze(60)
 			visible_message(span_danger("[src] knocks [C] down!"))
-			to_chat(src, span_cultlarge("\"Bring [C.p_them()] to me.\""))
+			to_chat(src, span_bloodcultlarge("\"Bring [C.p_them()] to me.\""))
 			return FALSE
 		do_attack_animation(C)
 		var/obj/item/bodypart/BP = pick(parts)

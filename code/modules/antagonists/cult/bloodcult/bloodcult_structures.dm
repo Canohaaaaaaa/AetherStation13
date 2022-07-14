@@ -35,7 +35,7 @@
 	. += span_notice("\The [src] is [anchored ? "":"not "]secured to the floor.")
 	if(IS_CULTIST(user) || isobserver(user))
 		if(cultist_examine_message)
-			. += span_cult("[cultist_examine_message]")
+			. += span_bloodcult("[cultist_examine_message]")
 		if(cooldowntime > world.time)
 			. += "<span class='cult italic'>The magic in [src] is too weak, [p_they()] will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>"
 
@@ -43,7 +43,7 @@
 	if(IS_CULTIST(user) || isobserver(user))
 		var/t_It = p_they(TRUE)
 		var/t_is = p_are()
-		return span_cult("[t_It] [t_is] at <b>[round(obj_integrity * 100 / max_integrity)]%</b> stability.")
+		return span_bloodcult("[t_It] [t_is] at <b>[round(obj_integrity * 100 / max_integrity)]%</b> stability.")
 	return ..()
 
 /obj/structure/destructible/cult/attack_animal(mob/living/simple_animal/user, list/modifiers)
@@ -53,9 +53,9 @@
 			obj_integrity = min(max_integrity, obj_integrity + 5)
 			Beam(user, icon_state="sendbeam", time=4)
 			user.visible_message(span_danger("[user] repairs \the <b>[src]</b>."), \
-				span_cult("You repair <b>[src]</b>, leaving [p_they()] at <b>[round(obj_integrity * 100 / max_integrity)]%</b> stability."))
+				span_bloodcult("You repair <b>[src]</b>, leaving [p_they()] at <b>[round(obj_integrity * 100 / max_integrity)]%</b> stability."))
 		else
-			to_chat(user, span_cult("You cannot repair [src], as [p_theyre()] undamaged!"))
+			to_chat(user, span_bloodcult("You cannot repair [src], as [p_theyre()] undamaged!"))
 	else
 		..()
 
@@ -98,7 +98,7 @@
 		to_chat(user, span_warning("You're pretty sure you know exactly what this is used for and you can't seem to touch it."))
 		return
 	if(!anchored)
-		to_chat(user, span_cultitalic("You need to anchor [src] to the floor with your dagger first."))
+		to_chat(user, span_bloodcultitalic("You need to anchor [src] to the floor with your dagger first."))
 		return
 	if(cooldowntime > world.time)
 		to_chat(user, "<span class='cult italic'>The magic in [src] is weak, it will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>")
@@ -123,7 +123,7 @@
 		cooldowntime = world.time + 2400
 		for(var/N in pickedtype)
 			new N(get_turf(src))
-			to_chat(user, span_cultitalic("You kneel before the altar and your faith is rewarded with the [choice]!"))
+			to_chat(user, span_bloodcultitalic("You kneel before the altar and your faith is rewarded with the [choice]!"))
 
 /obj/structure/destructible/cult/forge
 	name = "daemon forge"
@@ -142,7 +142,7 @@
 		to_chat(user, span_warning("The heat radiating from [src] pushes you back."))
 		return
 	if(!anchored)
-		to_chat(user, span_cultitalic("You need to anchor [src] to the floor with your dagger first."))
+		to_chat(user, span_bloodcultitalic("You need to anchor [src] to the floor with your dagger first."))
 		return
 	if(cooldowntime > world.time)
 		to_chat(user, "<span class='cult italic'>The magic in [src] is weak, it will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>")
@@ -167,7 +167,7 @@
 		cooldowntime = world.time + 2400
 		for(var/N in pickedtype)
 			new N(get_turf(src))
-			to_chat(user, span_cultitalic("You work the forge as dark knowledge guides your hands, creating the [choice]!"))
+			to_chat(user, span_bloodcultitalic("You work the forge as dark knowledge guides your hands, creating the [choice]!"))
 
 
 
@@ -263,7 +263,7 @@
 		to_chat(user, span_warning("These books won't open and it hurts to even try and read the covers."))
 		return
 	if(!anchored)
-		to_chat(user, span_cultitalic("You need to anchor [src] to the floor with your dagger first."))
+		to_chat(user, span_bloodcultitalic("You need to anchor [src] to the floor with your dagger first."))
 		return
 	if(cooldowntime > world.time)
 		to_chat(user, "<span class='cult italic'>The magic in [src] is weak, it will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>")
@@ -289,7 +289,7 @@
 		cooldowntime = world.time + 2400
 		for(var/N in pickedtype)
 			new N(get_turf(src))
-			to_chat(user, span_cultitalic("You summon the [choice] from the archives!"))
+			to_chat(user, span_bloodcultitalic("You summon the [choice] from the archives!"))
 
 /obj/effect/gateway
 	name = "gateway"

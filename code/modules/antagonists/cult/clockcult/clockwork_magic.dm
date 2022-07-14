@@ -6,7 +6,7 @@
 ///Attempts to weave a spell into the item (I should have made this entire thing a component in hindsight)
 /proc/clockwork_spellweaver(obj/item/target_item, datum/action/item_action/clockwork/choosen_spell, mob/owner)
 	var/datum/action/item_action/clockwork/spell = new choosen_spell(target_item)
-	ower.Grant(spell)
+	spell.Grant(owner)
 	SEND_SIGNAL(target_item, COMSIG_ITEM_WEAVE_SPELL, spell)
 
 /datum/action/innate/cult/clockwork
@@ -50,7 +50,7 @@
 
 ///Called when the user clicks the actions button, DOES NOT necessarly trigger the spell
 /datum/action/item_action/clockwork/Trigger() //Duplicate code yikes, fix this
-	to_chat(owner, span_cult(spell_description)) //TODO.. cult spans
+	to_chat(owner, span_bloodcult(spell_description)) //TODO.. cult spans
 	if(!IsAvailable())
 		return FALSE
 	if(SEND_SIGNAL(src, COMSIG_ACTION_TRIGGER, src) & COMPONENT_ACTION_BLOCK_TRIGGER)

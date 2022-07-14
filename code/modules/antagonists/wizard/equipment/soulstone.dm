@@ -55,12 +55,12 @@
 	. = ..()
 	if(role_check(user) || isobserver(user))
 		if (old_shard)
-			. += span_cult("A soulstone, used to capture a soul, either from dead humans or from freed shades.")
+			. += span_bloodcult("A soulstone, used to capture a soul, either from dead humans or from freed shades.")
 		else
-			. += span_cult("A soulstone, used to capture souls, either from unconscious or sleeping humans or from freed shades.")
-		. += span_cult("The captured soul can be placed into a construct shell to produce a construct, or released from the stone as a shade.")
+			. += span_bloodcult("A soulstone, used to capture souls, either from unconscious or sleeping humans or from freed shades.")
+		. += span_bloodcult("The captured soul can be placed into a construct shell to produce a construct, or released from the stone as a shade.")
 		if(spent)
-			. += span_cult("This shard is spent; it is now just a creepy rock.")
+			. += span_bloodcult("This shard is spent; it is now just a creepy rock.")
 
 /obj/item/soulstone/Destroy() //Stops the shade from being qdel'd immediately and their ghost being sent back to the arrival shuttle.
 	for(var/mob/living/simple_animal/shade/A in src)
@@ -88,7 +88,7 @@
 	if(!ishuman(M))//If target is not a human.
 		return ..()
 	if(IS_CULTIST(M) && IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"Come now, do not capture your bretheren's soul.\""))
+		to_chat(user, span_bloodcultlarge("\"Come now, do not capture your bretheren's soul.\""))
 		return
 	if(theme == THEME_HOLY && IS_CULTIST(user))
 		hot_potato(user)
@@ -173,7 +173,7 @@
 /obj/structure/constructshell/examine(mob/user)
 	. = ..()
 	if(IS_CULTIST(user) || IS_WIZARD(user) || user.stat == DEAD)
-		. += {"<span class='cult'>A construct shell, used to house bound souls from a soulstone.\n
+		. += {"<span class='bloodcult'>A construct shell, used to house bound souls from a soulstone.\n
 		Placing a soulstone with a soul into this shell allows you to produce your choice of the following:\n
 		An <b>Artificer</b>, which can produce <b>more shells and soulstones</b>, as well as fortifications.\n
 		A <b>Wraith</b>, which does high damage and can jaunt through walls, though it is quite fragile.\n
@@ -218,7 +218,7 @@
 			var/mob/living/carbon/human/T = target
 			var/datum/antagonist/cult/bloodcult/C = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 			if(C?.cult_team.is_sacrifice_target(T.mind))
-				to_chat(user, span_cult("<b>\"This soul is mine.</b></span> <span class='cultlarge'>SACRIFICE THEM!\""))
+				to_chat(user, span_bloodcult("<b>\"This soul is mine.</b></span> <span class='bloodcultlarge'>SACRIFICE THEM!\""))
 				return FALSE
 			if(contents.len)
 				to_chat(user, "[span_userdanger("Capture failed!")]: [src] is full! Free an existing soul to make room.")

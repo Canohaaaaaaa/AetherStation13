@@ -953,7 +953,7 @@
 				M.jitteriness += 4
 				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "gonged", /datum/mood_event/loud_gong)
 			if(2 to 3)
-				M.show_message(span_cult("GONG!"), MSG_AUDIBLE)
+				M.show_message(span_bloodcult("GONG!"), MSG_AUDIBLE)
 				M.playsound_local(H, 'sound/effects/gong.ogg', 75, TRUE)
 				M.soundbang_act(1, 0, 15, 2)
 				M.jitteriness += 3
@@ -1182,7 +1182,7 @@
 		if((L.mob_biotypes & MOB_UNDEAD) || isgolem(L) || HAS_TRAIT(L, TRAIT_RESISTCOLD))
 			continue //Do not affect our brothers
 
-		to_chat(L, span_cultlarge("A spine-chilling sound chills you to the bone!"))
+		to_chat(L, span_bloodcultlarge("A spine-chilling sound chills you to the bone!"))
 		L.apply_status_effect(/datum/status_effect/bonechill)
 		SEND_SIGNAL(L, COMSIG_ADD_MOOD_EVENT, "spooked", /datum/mood_event/spooked)
 

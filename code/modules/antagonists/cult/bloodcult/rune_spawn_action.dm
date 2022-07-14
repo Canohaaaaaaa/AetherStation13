@@ -26,7 +26,7 @@
 		to_chat(owner, span_warning("You cannot scribe runes in space!"))
 		return FALSE
 	if(locate(/obj/effect/rune) in T)
-		to_chat(owner, span_cult("There is already a rune here."))
+		to_chat(owner, span_bloodcult("There is already a rune here."))
 		return FALSE
 	if(!is_station_level(T.z) && !is_mining_level(T.z))
 		to_chat(owner, span_warning("The veil is not weak enough here."))

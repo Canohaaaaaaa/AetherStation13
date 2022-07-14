@@ -261,7 +261,7 @@
 	M.jitteriness = min(M.jitteriness + (2 * delta_time), 10)
 	if(IS_CULTIST(M))
 		for(var/datum/action/innate/cult/blood_magic/BM in M.actions)
-			to_chat(M, span_cultlarge("Your blood rites falter as holy water scours your body!"))
+			to_chat(M, span_bloodcultlarge("Your blood rites falter as holy water scours your body!"))
 			for(var/datum/action/innate/cult/blood_spell/BS in BM.spells)
 				qdel(BS)
 	if(data["misc"] >= (25 SECONDS)) // 10 units
@@ -274,7 +274,7 @@
 			if(prob(10))
 				M.visible_message(span_danger("[M] starts having a seizure!"), span_userdanger("You have a seizure!"))
 				M.Unconscious(12 SECONDS)
-				to_chat(M, "<span class='cultlarge'>[pick("Your blood is your bond - you are nothing without it", "Do not forget your place", \
+				to_chat(M, "<span class='bloodcultlarge'>[pick("Your blood is your bond - you are nothing without it", "Do not forget your place", \
 				"All that power, and you still fail?", "If you cannot scour this poison, I shall scour your meager life!")].</span>")
 	if(data["misc"] >= (1 MINUTES)) // 24 units
 		if(IS_CULTIST(M))

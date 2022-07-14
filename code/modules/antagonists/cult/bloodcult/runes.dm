@@ -260,7 +260,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	convertee.remove_wounds()
 	convertee.visible_message("<span class='warning'>[convertee] writhes in pain \
 	[brutedamage || burndamage ? "even as [convertee.p_their()] wounds heal and close" : "as the markings below [convertee.p_them()] glow a bloody red"]!</span>", \
-	span_cultlarge("<i>AAAAAAAAAAAAAA-</i>"))
+	span_bloodcultlarge("<i>AAAAAAAAAAAAAA-</i>"))
 	convertee.mind?.add_antag_datum(/datum/antagonist/cult/bloodcult)
 	convertee.Unconscious(100)
 	new /obj/item/melee/cultblade/dagger(get_turf(src))
@@ -288,14 +288,14 @@ structure_check() searches for nearby cultist structures required for the invoca
 
 	if(ispAI(sacrificial))
 		for(var/M in invokers)
-			to_chat(M, span_cultitalic("You don't think this is what Nar'Sie had in mind when She asked for blood sacrifices..."))
+			to_chat(M, span_bloodcultitalic("You don't think this is what Nar'Sie had in mind when She asked for blood sacrifices..."))
 		log_game("Offer rune failed - tried sacrificing pAI")
 		return FALSE
 
 	var/big_sac = FALSE
 	if((((ishuman(sacrificial) || iscyborg(sacrificial)) && sacrificial.stat != DEAD) || C.cult_team.is_sacrifice_target(sacrificial.mind)) && invokers.len < 3)
 		for(var/M in invokers)
-			to_chat(M, span_cultitalic("[sacrificial] is too greatly linked to the world! You need three acolytes!"))
+			to_chat(M, span_bloodcultitalic("[sacrificial] is too greatly linked to the world! You need three acolytes!"))
 		log_game("Offer rune failed - not enough acolytes and target is living or sac target")
 		return FALSE
 	if(sacrificial.mind)
@@ -311,12 +311,12 @@ structure_check() searches for nearby cultist structures required for the invoca
 	new /obj/effect/temp_visual/cult/sac(get_turf(src))
 	for(var/M in invokers)
 		if(big_sac)
-			to_chat(M, span_cultlarge("\"Yes! This is the one I desire! You have done well.\""))
+			to_chat(M, span_bloodcultlarge("\"Yes! This is the one I desire! You have done well.\""))
 		else
 			if(ishuman(sacrificial) || iscyborg(sacrificial))
-				to_chat(M, span_cultlarge("\"I accept this sacrifice.\""))
+				to_chat(M, span_bloodcultlarge("\"I accept this sacrifice.\""))
 			else
-				to_chat(M, span_cultlarge("\"I accept this meager sacrifice.\""))
+				to_chat(M, span_bloodcultlarge("\"I accept this meager sacrifice.\""))
 
 	if(iscyborg(sacrificial))
 		var/construct_class = show_radial_menu(first_invoker, sacrificial, GLOB.construct_radial_images, require_near = TRUE, tooltips = TRUE)
@@ -438,9 +438,9 @@ structure_check() searches for nearby cultist structures required for the invoca
 				movesuccess = TRUE
 		if(movesuccess)
 			visible_message(span_warning("There is a sharp crack of inrushing air, and everything above the rune disappears!"), null, "<i>You hear a sharp crack.</i>")
-			to_chat(user, span_cult("You[moveuserlater ? "r vision blurs, and you suddenly appear somewhere else":" send everything above the rune away"]."))
+			to_chat(user, span_bloodcult("You[moveuserlater ? "r vision blurs, and you suddenly appear somewhere else":" send everything above the rune away"]."))
 		else
-			to_chat(user, span_cult("You[moveuserlater ? "r vision blurs briefly, but nothing happens":" try send everything above the rune away, but the teleportation fails"]."))
+			to_chat(user, span_bloodcult("You[moveuserlater ? "r vision blurs briefly, but nothing happens":" try send everything above the rune away, but the teleportation fails"]."))
 		if(is_mining_level(z) && !is_mining_level(target.z)) //No effect if you stay on lavaland
 			actual_selected_rune.handle_portal("lava")
 		else
@@ -510,7 +510,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
 	var/area/place = get_area(src)
 	if(!(place in summon_objective.summon_spots))
-		to_chat(user, span_cultlarge("The Geometer can only be summoned where the veil is weak - in [english_list(summon_objective.summon_spots)]!"))
+		to_chat(user, span_bloodcultlarge("The Geometer can only be summoned where the veil is weak - in [english_list(summon_objective.summon_spots)]!"))
 		return
 	if(locate(/obj/narsie) in GLOB.poi_list)
 		for(var/M in invokers)
@@ -591,9 +591,9 @@ structure_check() searches for nearby cultist structures required for the invoca
 			fail_invoke()
 			return
 	SEND_SOUND(mob_to_revive, 'sound/ambience/antag/bloodcult.ogg')
-	to_chat(mob_to_revive, span_cultlarge("\"PASNAR SAVRAE YAM'TOTH. Arise.\""))
+	to_chat(mob_to_revive, span_bloodcultlarge("\"PASNAR SAVRAE YAM'TOTH. Arise.\""))
 	mob_to_revive.visible_message(span_warning("[mob_to_revive] draws in a huge breath, red light shining from [mob_to_revive.p_their()] eyes."), \
-								  span_cultlarge("You awaken suddenly from the void. You're alive!"))
+								  span_bloodcultlarge("You awaken suddenly from the void. You're alive!"))
 	rune_in_use = FALSE
 
 /obj/effect/rune/raise_dead/proc/validness_checks(mob/living/target_mob, mob/living/user)
@@ -732,7 +732,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 				if(isitem(I))
 					to_chat(L, span_userdanger("[I] suddenly burns hotly before returning to normal!"))
 				continue
-			to_chat(L, span_cultlarge("Your blood boils in your veins!"))
+			to_chat(L, span_bloodcultlarge("Your blood boils in your veins!"))
 	animate(src, color = "#FCB56D", time = 4)
 	sleep(4)
 	if(QDELETED(src))
@@ -796,10 +796,10 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/choice = tgui_alert(user,"You tear open a connection to the spirit realm...",,list("Summon a Cult Ghost","Ascend as a Dark Spirit","Cancel"))
 	if(choice == "Summon a Cult Ghost")
 		if(!is_station_level(T.z))
-			to_chat(user, span_cultitalic("<b>The veil is not weak enough here to manifest spirits, you must be on station!</b>"))
+			to_chat(user, span_bloodcultitalic("<b>The veil is not weak enough here to manifest spirits, you must be on station!</b>"))
 			return
 		if(ghosts >= ghost_limit)
-			to_chat(user, span_cultitalic("You are sustaining too many ghosts to summon more!"))
+			to_chat(user, span_bloodcultitalic("You are sustaining too many ghosts to summon more!"))
 			fail_invoke()
 			log_game("Manifest rune failed - too many summoned ghosts")
 			return list()
@@ -809,7 +809,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			if(O.client && !is_banned_from(O.ckey, ROLE_CULTIST) && !QDELETED(src) && !(isAdminObserver(O) && (O.client.prefs.toggles & ADMIN_IGNORE_CULT_GHOST)) && !QDELETED(O))
 				ghosts_on_rune += O
 		if(!ghosts_on_rune.len)
-			to_chat(user, span_cultitalic("There are no spirits near [src]!"))
+			to_chat(user, span_bloodcultitalic("There are no spirits near [src]!"))
 			fail_invoke()
 			log_game("Manifest rune failed - no nearby ghosts")
 			return list()
@@ -823,11 +823,11 @@ structure_check() searches for nearby cultist structures required for the invoca
 		ghosts++
 		playsound(src, 'sound/magic/exit_blood.ogg', 50, TRUE)
 		visible_message(span_warning("A cloud of red mist forms above [src], and from within steps... a [new_human.gender == FEMALE ? "wo":""]man."))
-		to_chat(user, span_cultitalic("Your blood begins flowing into [src]. You must remain in place and conscious to maintain the forms of those summoned. This will hurt you slowly but surely..."))
+		to_chat(user, span_bloodcultitalic("Your blood begins flowing into [src]. You must remain in place and conscious to maintain the forms of those summoned. This will hurt you slowly but surely..."))
 		var/obj/structure/emergency_shield/cult/weak/N = new(T)
 		new_human.key = ghost_to_spawn.key
 		new_human.mind?.add_antag_datum(/datum/antagonist/cult/bloodcult)
-		to_chat(new_human, span_cultitalic("<b>You are a servant of the Geometer. You have been made semi-corporeal by the cult of Nar'Sie, and you are to serve them at all costs.</b>"))
+		to_chat(new_human, span_bloodcultitalic("<b>You are a servant of the Geometer. You have been made semi-corporeal by the cult of Nar'Sie, and you are to serve them at all costs.</b>"))
 
 		while(!QDELETED(src) && !QDELETED(user) && !QDELETED(new_human) && (user in T))
 			if(user.stat != CONSCIOUS || HAS_TRAIT(new_human, TRAIT_CRITICAL_CONDITION))
@@ -839,7 +839,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		ghosts--
 		if(new_human)
 			new_human.visible_message(span_warning("[new_human] suddenly dissolves into bones and ashes."), \
-					span_cultlarge("Your link to the world fades. Your form breaks apart."))
+					span_bloodcultlarge("Your link to the world fades. Your form breaks apart."))
 			for(var/obj/I in new_human)
 				new_human.dropItemToGround(I, TRUE)
 			new_human.dust()
@@ -847,7 +847,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		affecting = user
 		affecting.add_atom_colour(RUNE_COLOR_DARKRED, ADMIN_COLOUR_PRIORITY)
 		affecting.visible_message(span_warning("[affecting] freezes statue-still, glowing an unearthly red."), \
-						span_cult("You see what lies beyond. All is revealed. In this form you find that your voice booms louder and you can mark targets for the entire cult"))
+						span_bloodcult("You see what lies beyond. All is revealed. In this form you find that your voice booms louder and you can mark targets for the entire cult"))
 		var/mob/dead/observer/G = affecting.ghostize(1)
 		var/datum/action/innate/cult/comm/spirit/CM = new
 		var/datum/action/innate/cult/ghostmark/GM = new
@@ -866,7 +866,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 				affecting.Paralyze(40)
 				break
 			if(affecting.health <= 10)
-				to_chat(G, span_cultitalic("Your body can no longer sustain the connection!"))
+				to_chat(G, span_bloodcultitalic("Your body can no longer sustain the connection!"))
 				break
 			sleep(5)
 		CM.Remove(G)
@@ -907,10 +907,10 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
 	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
 	if(summon_objective.summon_spots.len <= 1)
-		to_chat(user, span_cultlarge("Only one ritual site remains - it must be reserved for the final summoning!"))
+		to_chat(user, span_bloodcultlarge("Only one ritual site remains - it must be reserved for the final summoning!"))
 		return
 	if(!(place in summon_objective.summon_spots))
-		to_chat(user, span_cultlarge("The Apocalypse rune will remove a ritual site, where Nar'Sie can be summoned, it can only be scribed in [english_list(summon_objective.summon_spots)]!"))
+		to_chat(user, span_bloodcultlarge("The Apocalypse rune will remove a ritual site, where Nar'Sie can be summoned, it can only be scribed in [english_list(summon_objective.summon_spots)]!"))
 		return
 	summon_objective.summon_spots -= place
 	rune_in_use = TRUE
@@ -957,7 +957,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 				addtimer(CALLBACK(M,/atom/.proc/remove_alt_appearance,"cult_apoc",TRUE), duration)
 				images += C
 		else
-			to_chat(M, span_cultlarge("An Apocalypse Rune was invoked in the [place.name], it is no longer available as a summoning site!"))
+			to_chat(M, span_bloodcultlarge("An Apocalypse Rune was invoked in the [place.name], it is no longer available as a summoning site!"))
 			SEND_SOUND(M, 'sound/effects/pope_entry.ogg')
 	image_handler(images, duration)
 	if(intensity>=285) // Based on the prior formula, this means the cult makes up <15% of current players

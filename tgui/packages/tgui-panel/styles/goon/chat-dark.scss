@@ -526,31 +526,70 @@ em {
   color: #059223;
 }
 
-.cult {
+.clockcult {
+  color: #B18B25;
+}
+
+.clockcultitalic {
+  color: #B18B25;
+  font-style: italic;
+}
+
+.clockcultbold {
+  color: #B18B25;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.clockcultboldtalic {
+  color: #B18B25;
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.clockcultlarge {
+  color: #B18B25;
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.bloodcult {
   color: #973e3b;
 }
 
-.cultitalic {
+.bloodcultitalic {
   color: #973e3b;
   font-style: italic;
 }
 
-.cultbold {
+.bloodcultbold {
   color: #973e3b;
   font-style: italic;
   font-weight: bold;
 }
 
-.cultboldtalic {
+.bloodcultboldtalic {
   color: #973e3b;
   font-weight: bold;
   font-size: 185%;
 }
 
-.cultlarge {
+.bloodcultlarge {
   color: #973e3b;
   font-weight: bold;
   font-size: 185%;
+}
+
+.ratvar {
+  color: #B18B25;
+  font-weight: bold;
+  font-size: 925%;
+}
+
+.ratvarsmall {
+  color: #B18B25;
+  font-weight: bold;
+  font-size: 370%;
 }
 
 .narsie {

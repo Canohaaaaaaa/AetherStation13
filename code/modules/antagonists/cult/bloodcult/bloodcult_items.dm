@@ -86,7 +86,7 @@
 		user.Paralyze(100)
 		user.dropItemToGround(src, TRUE)
 		user.visible_message(span_warning("A powerful force shoves [user] away from [target]!"), \
-				span_cultlarge("\"You shouldn't play with sharp things. You'll poke someone's eye out.\""))
+				span_bloodcultlarge("\"You shouldn't play with sharp things. You'll poke someone's eye out.\""))
 		if(ishuman(user))
 			var/mob/living/carbon/human/miscreant = user
 			miscreant.apply_damage(rand(force/2, force), BRUTE, pick(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM))
@@ -109,7 +109,7 @@
 /obj/item/melee/cultblade/pickup(mob/living/user)
 	..()
 	if(!IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"I wouldn't advise that.\""))
+		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 
 /obj/item/cult_bastard
 	name = "bloody bastard sword"
@@ -174,7 +174,7 @@
 /obj/item/cult_bastard/pickup(mob/living/user)
 	. = ..()
 	if(!IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"I wouldn't advise that.\""))
+		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		force = 5
 		return
 	force = initial(force)
@@ -298,7 +298,7 @@
 		return
 	var/mob/living/carbon/carbon_user = user
 	if(user.num_legs < 2 || carbon_user.legcuffed) //if they can't be ensnared, stun for the same time as it takes to breakout of bola
-		to_chat(user, span_cultlarge("\"I wouldn't advise that.\""))
+		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		user.dropItemToGround(src, TRUE)
 		user.Paralyze(CULT_BOLA_PICKUP_STUN)
 	else
@@ -448,7 +448,7 @@
 /obj/item/clothing/suit/hooded/cultrobes/cult_shield/equipped(mob/living/user, slot)
 	..()
 	if(!IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"I wouldn't advise that.\""))
+		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		to_chat(user, span_warning("An overwhelming sense of nausea overpowers you!"))
 		user.dropItemToGround(src, TRUE)
 		user.Dizzy(30)
@@ -470,7 +470,7 @@
 /obj/item/clothing/suit/hooded/cultrobes/berserker/equipped(mob/living/user, slot)
 	..()
 	if(!IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"I wouldn't advise that.\""))
+		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		to_chat(user, span_warning("An overwhelming sense of nausea overpowers you!"))
 		user.dropItemToGround(src, TRUE)
 		user.Dizzy(30)
@@ -486,7 +486,7 @@
 /obj/item/clothing/glasses/hud/health/night/cultblind/equipped(mob/living/user, slot)
 	..()
 	if(!IS_CULTIST(user) && slot == ITEM_SLOT_EYES)
-		to_chat(user, span_cultlarge("\"You want to be blind, do you?\""))
+		to_chat(user, span_bloodcultlarge("\"You want to be blind, do you?\""))
 		user.dropItemToGround(src, TRUE)
 		user.Dizzy(30)
 		user.Paralyze(100)
@@ -576,9 +576,9 @@
 /obj/item/cult_shift/examine(mob/user)
 	. = ..()
 	if(uses)
-		. += span_cult("It has [uses] use\s remaining.")
+		. += span_bloodcult("It has [uses] use\s remaining.")
 	else
-		. += span_cult("It seems drained.")
+		. += span_bloodcult("It seems drained.")
 
 /obj/item/cult_shift/proc/handle_teleport_grab(turf/T, mob/user)
 	var/mob/living/carbon/C = user
@@ -792,7 +792,7 @@
 	var/halberd_location = get_turf(halberd)
 	var/owner_location = get_turf(owner)
 	if(get_dist(owner_location, halberd_location) > 10)
-		to_chat(owner,span_cult("The halberd is too far away!"))
+		to_chat(owner,span_bloodcult("The halberd is too far away!"))
 	else
 		cooldown = world.time + 20
 		if(isliving(halberd.loc))
@@ -813,7 +813,7 @@
 /obj/item/gun/ballistic/rifle/enchanted/arcane_barrage/blood/can_trigger_gun(mob/living/user)
 	. = ..()
 	if(!IS_CULTIST(user))
-		to_chat(user, span_cultlarge("\"Did you truly think that you could channel MY blood without my approval? Amusing, but futile.\""))
+		to_chat(user, span_bloodcultlarge("\"Did you truly think that you could channel MY blood without my approval? Amusing, but futile.\""))
 		if(iscarbon(user))
 			var/mob/living/carbon/C = user
 			if(C.active_hand_index == 1)

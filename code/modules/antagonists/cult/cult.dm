@@ -157,7 +157,7 @@
 		for(var/datum/mind/B in members)
 			if(B.current)
 				SEND_SOUND(B.current, 'sound/hallucinations/i_see_you2.ogg')
-				to_chat(B.current, span_cultlarge("<span class='warningplain'>The veil weakens as your cult grows, your eyes begin to glow...</span>")) //TODO.. Flavour text
+				to_chat(B.current, span_bloodcultlarge("<span class='warningplain'>The veil weakens as your cult grows, your eyes begin to glow...</span>")) //TODO.. Flavour text
 				addtimer(CALLBACK(src, .proc/rise, B.current), 200)
 		cult_risen = TRUE
 
@@ -165,7 +165,7 @@
 		for(var/datum/mind/B in members)
 			if(B.current)
 				SEND_SOUND(B.current, 'sound/hallucinations/im_here1.ogg')
-				to_chat(B.current, span_cultlarge("<span class='warningplain'>Your cult is ascendent and the red harvest approaches - you cannot hide your true nature for much longer!!</span>"))
+				to_chat(B.current, span_bloodcultlarge("<span class='warningplain'>Your cult is ascendent and the red harvest approaches - you cannot hide your true nature for much longer!!</span>"))
 				addtimer(CALLBACK(src, .proc/ascend, B.current), 200)
 		cult_ascendent = TRUE
 
