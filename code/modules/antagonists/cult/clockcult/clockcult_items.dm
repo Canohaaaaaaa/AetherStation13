@@ -48,6 +48,7 @@
 		force = force_on
 		throwforce = initial(throwforce)
 		w_class = weight_class_on
+		icon_state = initial(icon_state)
 		inhand_icon_state = on_inhand_icon_state
 		armour_penetration = initial(armour_penetration)
 		worn_icon_state = initial(worn_icon_state)

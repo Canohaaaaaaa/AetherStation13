@@ -1,9 +1,6 @@
+//TODO.. make this entire thing generic
 // Contains cult communion, guide, and cult master abilities
-
 /datum/action/innate/cult
-	icon_icon = 'icons/mob/actions/actions_cult.dmi'
-	background_icon_state = "bg_demon"
-	buttontooltipstyle = "cult"
 	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_IMMOBILE|AB_CHECK_CONSCIOUS
 
 /datum/action/innate/cult/IsAvailable()
@@ -33,7 +30,7 @@
 	user.whisper(html_decode(message))
 	var/title = "Acolyte"
 	var/span = "cult italic"
-	if(user.mind && user.mind.has_antag_datum(/datum/antagonist/cult/master))
+	if(user.mind && user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult/master))
 		span = "cultlarge"
 		title = "Master"
 	else if(!ishuman(user))
@@ -133,7 +130,7 @@
 	if (cultist)
 		cultist.silent = TRUE
 		cultist.on_removal()
-	Nominee.mind.add_antag_datum(/datum/antagonist/cult/master)
+	Nominee.mind.add_antag_datum(/datum/antagonist/cult/bloodcult/master)
 	for(var/datum/mind/B in team.members)
 		if(B.current)
 			for(var/datum/action/innate/cult/mastervote/vote in B.current.actions)
@@ -142,17 +139,17 @@
 				to_chat(B.current,span_bloodcultlarge("[Nominee] has won the cult's support and is now their master. Follow [Nominee.p_their()] orders to the best of your ability!"))
 	return TRUE
 
-/datum/action/innate/cult/master/IsAvailable()
-	if(!owner.mind || !owner.mind.has_antag_datum(/datum/antagonist/cult/master) || GLOB.cult_narsie)
+/datum/action/innate/cult/bloodcult/master/IsAvailable()
+	if(!owner.mind || !owner.mind.has_antag_datum(/datum/antagonist/cult/bloodcult/master) || GLOB.cult_narsie)
 		return FALSE
 	return ..()
 
-/datum/action/innate/cult/master/finalreck
+/datum/action/innate/cult/bloodcult/master/finalreck
 	name = "Final Reckoning"
 	desc = "A single-use spell that brings the entire cult to the master's location."
 	button_icon_state = "sintouch"
 
-/datum/action/innate/cult/master/finalreck/Activate()
+/datum/action/innate/cult/bloodcult/master/finalreck/Activate()
 	var/datum/antagonist/cult/antag = owner.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
 	if(!antag)
 		return
@@ -203,7 +200,7 @@
 	new /obj/effect/temp_visual/cult/blood/out(get_turf(src))
 	forceMove(final)
 
-/datum/action/innate/cult/master/finalreck/proc/chant(chant_number)
+/datum/action/innate/cult/bloodcult/master/finalreck/proc/chant(chant_number)
 	switch(chant_number)
 		if(1)
 			owner.say("C'arta forbici!", language = /datum/language/common, forced = "cult invocation")
@@ -217,7 +214,7 @@
 			owner.say("N'ath reth sh'yro eth d'rekkathnor!!!", language = /datum/language/common, forced = "cult invocation")
 			playsound(get_turf(owner),'sound/magic/clockwork/narsie_attack.ogg', 100, TRUE)
 
-/datum/action/innate/cult/master/cultmark
+/datum/action/innate/cult/bloodcult/master/cultmark
 	name = "Mark Target"
 	desc = "Marks a target for the cult."
 	button_icon_state = "cult_mark"
@@ -225,30 +222,30 @@
 	var/cooldown = 0
 	var/base_cooldown = 1200
 
-/datum/action/innate/cult/master/cultmark/New(Target)
+/datum/action/innate/cult/bloodcult/master/cultmark/New(Target)
 	CM = new()
 	CM.attached_action = src
 	..()
 
-/datum/action/innate/cult/master/cultmark/IsAvailable()
+/datum/action/innate/cult/bloodcult/master/cultmark/IsAvailable()
 	if(cooldown > world.time)
 		if(!CM.active)
 			to_chat(owner, span_bloodcultlarge("<b>You need to wait [DisplayTimeText(cooldown - world.time)] before you can mark another target!</b>"))
 		return FALSE
 	return ..()
 
-/datum/action/innate/cult/master/cultmark/Destroy()
+/datum/action/innate/cult/bloodcult/master/cultmark/Destroy()
 	QDEL_NULL(CM)
 	return ..()
 
-/datum/action/innate/cult/master/cultmark/Activate()
+/datum/action/innate/cult/bloodcult/master/cultmark/Activate()
 	CM.toggle(owner) //the important bit
 	return TRUE
 
 /obj/effect/proc_holder/cultmark
 	active = FALSE
 	ranged_mousepointer = 'icons/effects/mouse_pointers/cult_target.dmi'
-	var/datum/action/innate/cult/master/cultmark/attached_action
+	var/datum/action/innate/cult/bloodcult/master/cultmark/attached_action
 
 /obj/effect/proc_holder/cultmark/Destroy()
 	attached_action = null
@@ -305,11 +302,11 @@
 	team.blood_target = null
 
 
-/datum/action/innate/cult/master/cultmark/ghost
+/datum/action/innate/cult/bloodcult/master/cultmark/ghost
 	name = "Mark a Blood Target for the Cult"
 	desc = "Marks a target for the entire cult to track."
 
-/datum/action/innate/cult/master/cultmark/ghost/IsAvailable()
+/datum/action/innate/cult/bloodcult/master/cultmark/ghost/IsAvailable()
 	if(istype(owner, /mob/dead/observer) && IS_CULTIST(owner.mind.current))
 		return TRUE
 	else
@@ -384,7 +381,7 @@
 
 
 
-/datum/action/innate/cult/master/pulse
+/datum/action/innate/cult/bloodcult/master/pulse
 	name = "Eldritch Pulse"
 	desc = "Seize upon a fellow cultist or cult structure and teleport it to a nearby location."
 	icon_icon = 'icons/mob/actions/actions_spells.dmi'
@@ -395,13 +392,13 @@
 	var/throwing = FALSE
 	var/mob/living/throwee
 
-/datum/action/innate/cult/master/pulse/New()
+/datum/action/innate/cult/bloodcult/master/pulse/New()
 	PM = new()
 	PM.attached_action = src
 	..()
 
-/datum/action/innate/cult/master/pulse/IsAvailable()
-	if(!owner.mind || !owner.mind.has_antag_datum(/datum/antagonist/cult/master))
+/datum/action/innate/cult/bloodcult/master/pulse/IsAvailable()
+	if(!owner.mind || !owner.mind.has_antag_datum(/datum/antagonist/cult/bloodcult/master))
 		return FALSE
 	if(cooldown > world.time)
 		if(!PM.active)
@@ -409,20 +406,20 @@
 		return FALSE
 	return ..()
 
-/datum/action/innate/cult/master/pulse/Destroy()
+/datum/action/innate/cult/bloodcult/master/pulse/Destroy()
 	PM.attached_action = null //What the fuck is even going on here.
 	QDEL_NULL(PM)
 	return ..()
 
 
-/datum/action/innate/cult/master/pulse/Activate()
+/datum/action/innate/cult/bloodcult/master/pulse/Activate()
 	PM.toggle(owner) //the important bit
 	return TRUE
 
 /obj/effect/proc_holder/pulse
 	active = FALSE
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
-	var/datum/action/innate/cult/master/pulse/attached_action
+	var/datum/action/innate/cult/bloodcult/master/pulse/attached_action
 
 /obj/effect/proc_holder/pulse/Destroy()
 	attached_action = null

@@ -1,8 +1,3 @@
-///Redo this shitcode
-#define CLOCKWORK_SPELL_LIST list( \
-	/datum/action/item_action/clockwork/bogus, \
-)
-
 ///Attempts to weave a spell into the item (I should have made this entire thing a component in hindsight)
 /proc/clockwork_spellweaver(obj/item/target_item, datum/action/item_action/clockwork/choosen_spell, mob/owner)
 	var/datum/action/item_action/clockwork/spell = new choosen_spell(target_item)
@@ -13,21 +8,24 @@
 	background_icon_state = "bg_clock"
 	icon_icon = 'icons/obj/clockwork_objects.dmi'
 	button_icon_state = "wall_gear"
+	buttontooltipstyle = "clockcult"
 	desc = "Weave a powerful spell into your gear. It is quicker in the <b>Requiem</b>."
+	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
 
 /datum/action/innate/cult/clockwork/Grant()
 	. = ..()
-	button.screen_loc = DEFAULT_BLOODSPELLS
-	button.moved = DEFAULT_BLOODSPELLS
+	button.screen_loc = DEFAULT_CULTSPELLS
+	button.moved = DEFAULT_CULTSPELLS
 	button.ordered = FALSE
 	button.locked = TRUE
 
 /datum/action/innate/cult/clockwork/Activate()
 	. = ..()
 	var/obj/item/target_item = owner.get_active_held_item()
-	if(!(target_item.type in CLOCKWORK_ITEM_WHITELIST))
+	if(!target_item || !(target_item.type in CLOCKWORK_ITEM_WHITELIST))
+		owner.balloon_alert(owner, "No valid clockwork gear in the active hand!")
 		return
-	var/spell_choice = input("Pick a spell to weave.", "Clockwork spells") as null|anything in CLOCKWORK_SPELL_LIST
+	var/spell_choice = input("Pick a spell to weave.", "Clockwork spells") as null|anything in subtypesof(/datum/action/item_action/clockwork)
 	clockwork_spellweaver(target_item, spell_choice, owner)
 
 //** Spells bound to items, yet not casted by the UI button, instead the button represents the current cooldown and works as a tip

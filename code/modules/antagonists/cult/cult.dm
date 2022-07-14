@@ -117,19 +117,6 @@
 	silent = TRUE
 	return ..()
 
-/datum/antagonist/cult/master/bloodcult
-	ignore_implant = TRUE
-	show_in_antagpanel = FALSE //Feel free to add this later
-	var/datum/action/innate/cult/master/finalreck/reckoning = new
-	var/datum/action/innate/cult/master/cultmark/bloodmark = new
-	var/datum/action/innate/cult/master/pulse/throwing = new
-
-/datum/antagonist/cult/master/bloodcult/Destroy()
-	QDEL_NULL(reckoning)
-	QDEL_NULL(bloodmark)
-	QDEL_NULL(throwing)
-	return ..()
-
 /datum/team/cult
 	name = "Cult"
 
@@ -188,6 +175,8 @@
 		human.apply_overlay(HALO_LAYER)
 
 /datum/team/cult/proc/make_image(datum/objective/sacrifice/sac_objective)
+	if(!sac_objective)
+		return
 	var/datum/job/job_of_sacrifice = sac_objective.target.assigned_role
 	var/datum/preferences/prefs_of_sacrifice = sac_objective.target.current.client.prefs
 	var/icon/reshape = get_flat_human_icon(null, job_of_sacrifice, prefs_of_sacrifice, list(SOUTH))

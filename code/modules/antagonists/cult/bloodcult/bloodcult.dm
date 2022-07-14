@@ -86,16 +86,23 @@
 		if(istype(o, /obj/item/melee/cultblade/dagger) || istype(o, /obj/item/stack/sheet/runed_metal))
 			qdel(o)
 
-/datum/antagonist/cult/master/bloodcult/on_gain()
+/datum/antagonist/cult/bloodcult/master
+	ignore_implant = TRUE
+	show_in_antagpanel = FALSE //Feel free to add this later
+	var/datum/action/innate/cult/bloodcult/master/finalreck/reckoning = new
+	var/datum/action/innate/cult/bloodcult/master/cultmark/bloodmark = new
+	var/datum/action/innate/cult/bloodcult/master/pulse/throwing = new
+
+/datum/antagonist/cult/bloodcult/master/bloodcult/on_gain()
 	. = ..()
 	var/mob/living/current = owner.current
 	set_antag_hud(current, "cultmaster")
 
-/datum/antagonist/cult/master/bloodcult/greet()
+/datum/antagonist/cult/bloodcult/master/greet()
 	to_chat(owner.current, "<span class='warningplain'><span class='bloodcultlarge'>You are the cult's Master</span>. As the cult's Master, you have a unique title and loud voice when communicating, are capable of marking \
 	targets, such as a location or a noncultist, to direct the cult to them, and, finally, you are capable of summoning the entire living cult to your location <b><i>once</i></b>. Use these abilities to direct the cult to victory at any cost.</span>")
 
-/datum/antagonist/cult/master/bloodcult/apply_innate_effects(mob/living/mob_override)
+/datum/antagonist/cult/bloodcult/master/apply_innate_effects(mob/living/mob_override)
 	. = ..()
 	var/mob/living/current = owner.current
 	if(mob_override)
@@ -111,7 +118,7 @@
 		if(cult_team.cult_ascendent)
 			cult_team.ascend(current)
 
-/datum/antagonist/cult/master/bloodcult/remove_innate_effects(mob/living/mob_override)
+/datum/antagonist/cult/bloodcult/master/remove_innate_effects(mob/living/mob_override)
 	. = ..()
 	var/mob/living/current = owner.current
 	if(mob_override)
@@ -121,6 +128,12 @@
 	throwing.Remove(current)
 	current.update_action_buttons_icon()
 	current.remove_status_effect(/datum/status_effect/cult_master)
+
+/datum/antagonist/cult/bloodcult/master/Destroy()
+	QDEL_NULL(reckoning)
+	QDEL_NULL(bloodmark)
+	QDEL_NULL(throwing)
+	return ..()
 
 /datum/team/cult/bloodcult
 	name = "Cult"

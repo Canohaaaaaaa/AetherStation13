@@ -2,24 +2,22 @@
 	name = "Prepare Blood Magic"
 	button_icon_state = "carve"
 	desc = "Prepare blood magic by carving runes into your flesh. This is easier with an <b>empowering rune</b>."
+	icon_icon = 'icons/mob/actions/actions_cult.dmi'
+	background_icon_state = "bg_demon"
+	buttontooltipstyle = "bloodcult"
 	var/list/spells = list()
 	var/channeling = FALSE
 
 /datum/action/innate/cult/blood_magic/Grant()
 	..()
-	button.screen_loc = DEFAULT_BLOODSPELLS
-	button.moved = DEFAULT_BLOODSPELLS
+	button.screen_loc = DEFAULT_CULTSPELLS
+	button.moved = DEFAULT_CULTSPELLS
 	button.ordered = FALSE
 
 /datum/action/innate/cult/blood_magic/Remove()
 	for(var/X in spells)
 		qdel(X)
 	..()
-
-/datum/action/innate/cult/blood_magic/IsAvailable()
-	if(!IS_CULTIST(owner))
-		return FALSE
-	return ..()
 
 /datum/action/innate/cult/blood_magic/proc/Positioning()
 	var/list/screen_loc_split = splittext(button.screen_loc,",")
@@ -88,6 +86,9 @@
 	name = "Blood Magic"
 	button_icon_state = "telerune"
 	desc = "Fear the Old Blood."
+	icon_icon = 'icons/mob/actions/actions_cult.dmi'
+	background_icon_state = "bg_demon"
+	buttontooltipstyle = "cult"
 	var/charges = 1
 	var/magic_path = null
 	var/obj/item/melee/blood_magic/hand_magic
