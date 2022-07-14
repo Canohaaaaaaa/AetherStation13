@@ -827,8 +827,6 @@
 ///return a truthy value to prevent ensouling, checked in /obj/effect/proc_holder/spell/targeted/lichdom/cast(): (mob/user)
 #define COMSIG_ITEM_IMBUE_SOUL "item_imbue_soul"
 ///TODO.. doc this
-#define COMSIG_ITEM_WEAVE_SPELL_ATTEMPT "item_weave_spell_attempt"
-///TODO.. doc this
 #define COMSIG_ITEM_WEAVE_SPELL "item_weave_spell"
 #define COMSIG_ITEM_WEAVE_SPELL_CAST "item_weave_spell_cast"
 ///called before marking an object for retrieval, checked in /obj/effect/proc_holder/spell/targeted/summonitem/cast() : (mob/user)

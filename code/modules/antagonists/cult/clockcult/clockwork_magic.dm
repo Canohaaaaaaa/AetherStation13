@@ -5,12 +5,12 @@
 	SEND_SIGNAL(target_item, COMSIG_ITEM_WEAVE_SPELL, spell)
 
 /datum/action/innate/cult/clockwork
+	name = "Prepare Clockwork Magic"
+	desc = "Weave a powerful spell into your gear. It is quicker in the <b>Requiem</b>."
 	background_icon_state = "bg_clock"
 	icon_icon = 'icons/obj/clockwork_objects.dmi'
 	button_icon_state = "wall_gear"
-	buttontooltipstyle = "clockcult"
-	desc = "Weave a powerful spell into your gear. It is quicker in the <b>Requiem</b>."
-	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS
+	buttontooltipstyle = "cult" //TODO.. buttooltip is blood red this is no good
 
 /datum/action/innate/cult/clockwork/Grant()
 	. = ..()
@@ -46,6 +46,13 @@
 	var/list/target_victims = list()
 	COOLDOWN_DECLARE(spell_cooldown)
 
+/datum/action/item_action/clockwork/Grant()
+	..()
+	button.screen_loc = DEFAULT_CULTSPELLS
+	button.moved = DEFAULT_CULTSPELLS
+	button.ordered = FALSE
+	positioning()
+
 ///Called when the user clicks the actions button, DOES NOT necessarly trigger the spell
 /datum/action/item_action/clockwork/Trigger() //Duplicate code yikes, fix this
 	to_chat(owner, span_bloodcult(spell_description)) //TODO.. cult spans
@@ -55,12 +62,28 @@
 		return FALSE
 	return TRUE
 
+///make this generic or something idk
+/datum/action/item_action/clockwork/proc/positioning()
+	var/list/screen_loc_split = splittext(button.screen_loc,",")
+	var/list/screen_loc_X = splittext(screen_loc_split[1],":")
+	var/list/screen_loc_Y = splittext(screen_loc_split[2],":")
+	var/pix_X = text2num(screen_loc_X[2])
+	var/list/owner_clockwork_spells = list()
+	for(var/datum/action/A in owner.actions)
+		if(istype(A, /datum/action/item_action/clockwork))
+			owner_clockwork_spells += A
+	for(var/datum/action/item_action/clockwork/CWS in owner_clockwork_spells)
+		var/order = pix_X+owner_clockwork_spells.Find(CWS)*31
+		CWS.button.screen_loc = "[screen_loc_X[1]]:[order],[screen_loc_Y[1]]:[screen_loc_Y[2]]"
+		CWS.button.moved = CWS.button.screen_loc
+
 /datum/action/item_action/clockwork/proc/spell_trigger(atom/target)
 	if(!can_cast(target))
-		return
+		return FALSE
 	COOLDOWN_START(src, spell_cooldown, cooldown_duration)
 	owner.say(spell_phrase)
 	cast(target)
+	return TRUE
 
 /datum/action/item_action/clockwork/proc/can_cast(atom/target)
 	SHOULD_CALL_PARENT(TRUE)

@@ -1,9 +1,13 @@
 ///List of every item allowed to be imbued with clockwork spells
 #define CLOCKWORK_ITEM_WHITELIST list( \
-	/obj/item/melee/clockwork/spear, \
+	/obj/item/melee/clockwork_spear, \
+	/obj/item/crowbar/power/clockwork, \
+	/obj/item/weldingtool/experimental/clockwork, \
+	/obj/item/screwdriver/power/clockwork, \
+	/obj/item/multitool/clockwork, \
 )
 
-/obj/item/melee/clockwork/spear
+/obj/item/melee/clockwork_spear
 	name = "WIP"
 	icon = 'icons/obj/clockwork_objects.dmi'
 	lefthand_file = 'icons/mob/inhands/antag/clockwork_lefthand.dmi'
@@ -34,14 +38,13 @@
 	/// What is the new size class when turned on
 	var/weight_class_on = WEIGHT_CLASS_BULKY
 
-/obj/item/melee/clockwork/spear/Initialize()
+/obj/item/melee/clockwork_spear/Initialize()
 	. = ..()
 	//TODO.. butchering?
 	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
-	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL_ATTEMPT, /proc/clockwork_spellweaver)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
-/obj/item/melee/clockwork/spear/attack_self(mob/user, modifiers)
+/obj/item/melee/clockwork_spear/attack_self(mob/user, modifiers)
 	on = !on
 
 	if(on)
@@ -65,13 +68,107 @@
 	add_fingerprint(user)
 	update_icon_state()
 
-/obj/item/melee/clockwork/spear/proc/spell_link(source, spell)
+/obj/item/melee/clockwork_spear/proc/spell_link(source, spell)
 	//TODO.. add enchanted sprite
 	stored_spell = spell
-	actions_types += spell
 
-/obj/item/melee/clockwork/spear/proc/cast_spell(datum/source, atom/target, mob/user, params)
+/obj/item/melee/clockwork_spear/proc/cast_spell(datum/source, atom/target, mob/user, params)
 	if(!stored_spell)
-		return COMPONENT_SECONDARY_CALL_NORMAL_ATTACK_CHAIN
-	stored_spell.spell_trigger(target)
-	return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+
+///Has the special recharging property of the experimental while being slightly slower
+/obj/item/weldingtool/experimental/clockwork
+	name = "WIP"
+	desc = "WIP"
+	toolspeed = 0.75
+	light_color = LIGHT_COLOR_PURPLE
+	light_power = 1
+	light_range = 2.5
+	var/datum/action/item_action/clockwork/stored_spell
+
+/obj/item/weldingtool/experimental/clockwork/Initialize()
+	. = ..()
+	//TODO.. butchering?
+	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
+	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/weldingtool/experimental/clockwork/proc/spell_link(source, spell)
+	stored_spell = spell
+
+/obj/item/weldingtool/experimental/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+
+/obj/item/crowbar/power/clockwork
+	name = "WIP"
+	desc = "WIP"
+	force_opens = FALSE
+	var/datum/action/item_action/clockwork/stored_spell
+
+/obj/item/crowbar/power/clockwork/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
+	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/crowbar/power/clockwork/proc/spell_link(source, spell)
+	stored_spell = spell
+
+/obj/item/crowbar/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+
+/obj/item/screwdriver/power/clockwork
+	name = "WIP"
+	desc = "WIP"
+	icon_state = "drill_screw"
+	inhand_icon_state = "drill"
+	var/datum/action/item_action/clockwork/stored_spell
+
+/obj/item/screwdriver/power/clockwork/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
+	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/screwdriver/power/clockwork/proc/spell_link(source, spell)
+	stored_spell = spell
+
+/obj/item/screwdriver/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+
+/obj/item/multitool/clockwork
+	name = "WIP"
+	desc = "WIP"
+	icon = 'icons/obj/clockwork_objects.dmi'
+	lefthand_file = 'icons/mob/inhands/antag/clockwork_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/antag/clockwork_righthand.dmi'
+	icon_state = "dread_ipad" //Nice name
+	inhand_icon_state = "clockwork_slab"
+	var/datum/action/item_action/clockwork/stored_spell
+
+/obj/item/multitool/clockwork/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
+	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/multitool/clockwork/proc/spell_link(source, spell)
+	stored_spell = spell
+
+/obj/item/multitool/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
