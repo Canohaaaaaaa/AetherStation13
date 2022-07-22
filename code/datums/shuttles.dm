@@ -144,6 +144,10 @@
 	port_id = "infiltrator"
 	who_can_purchase = null
 
+/datum/map_template/shuttle/clockcult
+	port_id = "clockcult"
+	who_can_purchase = null
+
 /datum/map_template/shuttle/aux_base
 	port_id = "aux_base"
 	who_can_purchase = null
@@ -705,3 +709,7 @@
 /datum/map_template/shuttle/snowdin/excavation
 	suffix = "excavation"
 	name = "Snowdin Excavation Elevator"
+
+/datum/map_template/shuttle/clockcult/kestrel
+	suffix = "kestrel"
+	name = "WHAT?"

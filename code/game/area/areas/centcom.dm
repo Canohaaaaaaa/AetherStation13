@@ -137,6 +137,13 @@
 	flags_1 = NONE
 	network_root_id = "ALIENS"
 
+/area/clockcult_ship
+	name = "Clockcult Ship"
+	icon_state = "yellow" //TODO.. this
+	area_flags = UNIQUE_AREA
+	ambience_index = AMBIENCE_REEBE
+	network_root_id = "" //??
+
 //Syndicates
 /area/syndicate_mothership
 	name = "Syndicate Mothership"

@@ -49,6 +49,12 @@
 /area/shuttle/syndicate/airlock
 	name = "Syndicate Infiltrator Airlock"
 
+////////////////////////////Clockcult Base////////////////////////////
+/area/shuttle/clockcult
+	name = "\the Revenant"
+	ambience_index = AMBIENCE_REEBE
+	area_limited_icon_smoothing = /area/shuttle/clockcult //TODO.. Figure out what the fuck this is supposed to do
+
 ////////////////////////////Pirate Shuttle////////////////////////////
 
 /area/shuttle/pirate

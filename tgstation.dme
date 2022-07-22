@@ -3404,6 +3404,7 @@
 #include "code\modules\security_levels\security_levels.dm"
 #include "code\modules\shuttle\arrivals.dm"
 #include "code\modules\shuttle\assault_pod.dm"
+#include "code\modules\shuttle\clockcult.dm"
 #include "code\modules\shuttle\computer.dm"
 #include "code\modules\shuttle\docking.dm"
 #include "code\modules\shuttle\elevator.dm"
