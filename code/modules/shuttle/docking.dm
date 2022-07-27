@@ -103,7 +103,7 @@
 	return DOCKING_SUCCESS
 
 /obj/docking_port/mobile/proc/preflight_check(list/old_turfs, list/new_turfs, list/areas_to_move, rotation)
-	for(var/i in 1 to old_turfs.len)
+	for(var/i in 1 to length(old_turfs))
 		CHECK_TICK
 		var/turf/oldT = old_turfs[i]
 		var/turf/newT = new_turfs[i]
@@ -115,10 +115,8 @@
 		var/area/old_area = oldT.loc
 		var/move_mode = old_area.beforeShuttleMove(shuttle_areas) //areas
 
-		var/list/old_contents = oldT.contents
-		for(var/k in 1 to old_contents.len)
+		for(var/atom/movable/moving_atom as anything in oldT.contents)
 			CHECK_TICK
-			var/atom/movable/moving_atom = old_contents[k]
 			if(moving_atom.loc != oldT) //fix for multi-tile objects
 				continue
 			move_mode = moving_atom.beforeShuttleMove(newT, rotation, move_mode, src) //atoms
@@ -136,13 +134,6 @@
 		var/turf/oldT = old_turfs[i]
 		var/turf/newT = new_turfs[i]
 		var/move_mode = old_turfs[oldT]
-		if(move_mode & MOVE_CONTENTS)
-			for(var/k in oldT)
-				var/atom/movable/moving_atom = k
-				if(moving_atom.loc != oldT) //fix for multi-tile objects
-					continue
-				moving_atom.onShuttleMove(newT, oldT, movement_force, movement_direction, old_dock, src) //atoms
-				moved_atoms[moving_atom] = oldT
 
 		if(move_mode & MOVE_TURF)
 			oldT.onShuttleMove(newT, movement_force, movement_direction) //turfs
@@ -150,6 +141,14 @@
 		if(move_mode & MOVE_AREA)
 			var/area/shuttle_area = oldT.loc
 			shuttle_area.onShuttleMove(oldT, newT, underlying_old_area) //areas
+
+		if(move_mode & MOVE_CONTENTS)
+			for(var/k in oldT)
+				var/atom/movable/moving_atom = k
+				if(moving_atom.loc != oldT) //fix for multi-tile objects
+					continue
+				moving_atom.onShuttleMove(newT, oldT, movement_force, movement_direction, old_dock, src) //atoms
+				moved_atoms[moving_atom] = oldT
 
 /obj/docking_port/mobile/proc/cleanup_runway(obj/docking_port/stationary/new_dock, list/old_turfs, list/new_turfs, list/areas_to_move, list/moved_atoms, rotation, movement_direction, area/underlying_old_area)
 	underlying_old_area.afterShuttleMove()
