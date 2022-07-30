@@ -72,6 +72,8 @@
 	force = 15
 	toolspeed = 0.7
 	force_opens = TRUE
+	var/icon_state_cutter = "jaws_cutter"
+	var/icon_state_crowbar = "jaws_pry"
 
 /obj/item/crowbar/power/syndicate
 	name = "Syndicate jaws of life"
@@ -79,6 +81,8 @@
 	icon_state = "jaws_pry_syndie"
 	toolspeed = 0.5
 	force_opens = TRUE
+	icon_state_cutter = "jaws_cutter_syndie"
+	icon_state_crowbar = "jaws_pry_syndie"
 
 /obj/item/crowbar/power/examine()
 	. = ..()
@@ -115,16 +119,9 @@
 
 /obj/item/crowbar/power/update_icon_state()
 	if(tool_behaviour == TOOL_WIRECUTTER)
-		icon_state = "jaws_cutter"
+		icon_state = icon_state_cutter
 	else
-		icon_state = "jaws_pry"
-	return ..()
-
-/obj/item/crowbar/power/syndicate/update_icon_state()
-	if(tool_behaviour == TOOL_WIRECUTTER)
-		icon_state = "jaws_cutter_syndie"
-	else
-		icon_state = "jaws_pry_syndie"
+		icon_state = icon_state_crowbar
 	return ..()
 
 /obj/item/crowbar/power/attack(mob/living/carbon/C, mob/user)

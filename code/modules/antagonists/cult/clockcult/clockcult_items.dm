@@ -69,7 +69,8 @@
 	update_icon_state()
 
 /obj/item/melee/clockwork_spear/proc/spell_link(source, spell)
-	//TODO.. add enchanted sprite
+	if(stored_spell)
+		qdel(stored_spell)
 	stored_spell = spell
 
 /obj/item/melee/clockwork_spear/proc/cast_spell(datum/source, atom/target, mob/user, params)
@@ -83,6 +84,8 @@
 /obj/item/weldingtool/experimental/clockwork
 	name = "WIP"
 	desc = "WIP"
+	icon = 'icons/obj/clocktools.dmi'
+	icon_state = "brasswelder"
 	toolspeed = 0.75
 	light_color = LIGHT_COLOR_PURPLE
 	light_power = 1
@@ -96,6 +99,8 @@
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
 /obj/item/weldingtool/experimental/clockwork/proc/spell_link(source, spell)
+	if(stored_spell)
+		qdel(stored_spell)
 	stored_spell = spell
 
 /obj/item/weldingtool/experimental/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
@@ -108,7 +113,11 @@
 /obj/item/crowbar/power/clockwork
 	name = "WIP"
 	desc = "WIP"
+	icon = 'icons/obj/clocktools.dmi'
+	icon_state = "jaws_cutter_brass"
 	force_opens = FALSE
+	icon_state_cutter = "jaws_cutter_brass"
+	icon_state_crowbar = "jaws_pry_brass"
 	var/datum/action/item_action/clockwork/stored_spell
 
 /obj/item/crowbar/power/clockwork/Initialize()
@@ -117,7 +126,11 @@
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
 /obj/item/crowbar/power/clockwork/proc/spell_link(source, spell)
+	if(stored_spell)
+		qdel(stored_spell)
 	stored_spell = spell
+	icon_state_cutter = "jaws_cutter_brass_powered"
+	icon_state_crowbar = "jaws_pry_brass_powered"
 
 /obj/item/crowbar/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
 	if(!stored_spell)
@@ -129,8 +142,8 @@
 /obj/item/screwdriver/power/clockwork
 	name = "WIP"
 	desc = "WIP"
-	icon_state = "drill_screw"
-	inhand_icon_state = "drill"
+	icon = 'icons/obj/clocktools.dmi'
+	icon_state = "brassdrill_screw"
 	var/datum/action/item_action/clockwork/stored_spell
 
 /obj/item/screwdriver/power/clockwork/Initialize()
@@ -138,7 +151,20 @@
 	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
+/obj/item/screwdriver/power/clockwork/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/items/change_drill.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_SCREWDRIVER)
+		tool_behaviour = TOOL_WRENCH
+		balloon_alert(user, "attached bolt bit")
+		icon_state = "brassdrill_bolt"
+	else
+		tool_behaviour = TOOL_SCREWDRIVER
+		balloon_alert(user, "attached screw bit")
+		icon_state = "brassdrill_screw"
+
 /obj/item/screwdriver/power/clockwork/proc/spell_link(source, spell)
+	if(stored_spell)
+		qdel(stored_spell)
 	stored_spell = spell
 
 /obj/item/screwdriver/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
@@ -164,6 +190,8 @@
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
 /obj/item/multitool/clockwork/proc/spell_link(source, spell)
+	if(stored_spell)
+		qdel(stored_spell)
 	stored_spell = spell
 
 /obj/item/multitool/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
