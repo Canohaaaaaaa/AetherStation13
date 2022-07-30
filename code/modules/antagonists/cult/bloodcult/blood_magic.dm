@@ -265,7 +265,7 @@
 		var/mob/living/carbon/human/H = target
 		H.hallucination = max(H.hallucination, 120)
 		SEND_SOUND(ranged_ability_user, sound('sound/effects/ghost.ogg',0,1,50))
-		var/image/C = image('icons/effects/cult_effects.dmi',H,"bloodsparkles", ABOVE_MOB_LAYER)
+		var/image/C = image('icons/effects/bloodcult_effects.dmi',H,"bloodsparkles", ABOVE_MOB_LAYER)
 		add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/cult, "cult_apoc", C, NONE)
 		addtimer(CALLBACK(H,/atom/.proc/remove_alt_appearance,"cult_apoc",TRUE), 2400, TIMER_OVERRIDE|TIMER_UNIQUE)
 		to_chat(ranged_ability_user,span_bloodcult("<b>[H] has been cursed with living nightmares!</b>"))
@@ -733,7 +733,7 @@
 					H.adjustBruteLoss((overall_damage*ratio) * (H.getBruteLoss() / overall_damage), 0)
 					H.updatehealth()
 					playsound(get_turf(H), 'sound/magic/staff_healing.ogg', 25)
-					new /obj/effect/temp_visual/cult/sparks(get_turf(H))
+					new /obj/effect/temp_visual/bloodcult/sparks(get_turf(H))
 					user.Beam(H, icon_state="sendbeam", time = 15)
 			else
 				if(H.stat == DEAD)
@@ -749,7 +749,7 @@
 					playsound(get_turf(H), 'sound/magic/enter_blood.ogg', 50)
 					H.visible_message(span_danger("[user] drains some of [H]'s blood!"))
 					to_chat(user,span_bloodcultitalic("Your blood rite gains 50 charges from draining [H]'s blood."))
-					new /obj/effect/temp_visual/cult/sparks(get_turf(H))
+					new /obj/effect/temp_visual/bloodcult/sparks(get_turf(H))
 				else
 					to_chat(user,span_warning("[H.p_theyre(TRUE)] missing too much blood - you cannot drain [H.p_them()] further!"))
 					return
@@ -781,13 +781,13 @@
 					temp += 30
 				else
 					temp += max((B.bloodiness**2)/800,1)
-				new /obj/effect/temp_visual/cult/turf/floor(get_turf(B))
+				new /obj/effect/temp_visual/bloodcult/turf/floor(get_turf(B))
 				qdel(B)
 		for(var/obj/effect/decal/cleanable/trail_holder/TH in view(T, 2))
 			qdel(TH)
 		if(temp)
 			user.Beam(T,icon_state="drainbeam", time = 15)
-			new /obj/effect/temp_visual/cult/sparks(get_turf(user))
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(user))
 			playsound(T, 'sound/magic/enter_blood.ogg', 50)
 			to_chat(user, span_bloodcultitalic("Your blood rite has gained [round(temp)] charge\s from blood sources around you!"))
 			uses += max(1, round(temp))

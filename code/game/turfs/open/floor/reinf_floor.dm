@@ -203,7 +203,7 @@
 
 /turf/open/floor/engine/cult/Initialize()
 	. = ..()
-	new /obj/effect/temp_visual/cult/turf/floor(src)
+	new /obj/effect/temp_visual/bloodcult/turf/floor(src)
 	realappearance = new /obj/effect/cult_turf/overlay/floor/bloodcult(src)
 	realappearance.linked = src
 

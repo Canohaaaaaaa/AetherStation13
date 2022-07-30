@@ -173,7 +173,7 @@
 					var/turf/mobloc = get_turf(B.current)
 					switch(i)
 						if(1)
-							new /obj/effect/temp_visual/cult/sparks(mobloc, B.current.dir)
+							new /obj/effect/temp_visual/bloodcult/sparks(mobloc, B.current.dir)
 							playsound(mobloc, "sparks", 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 						if(2)
 							new /obj/effect/temp_visual/dir_setting/cult/phase/out(mobloc, B.current.dir)
@@ -189,7 +189,7 @@
 									var/obj/item/soulstone/S = B.current.loc
 									S.release_shades(owner)
 								B.current.setDir(SOUTH)
-								new /obj/effect/temp_visual/cult/blood(final)
+								new /obj/effect/temp_visual/bloodcult/blood(final)
 								addtimer(CALLBACK(B.current, /mob/.proc/reckon, final), 10)
 		else
 			return
@@ -197,7 +197,7 @@
 	Remove(owner)
 
 /mob/proc/reckon(turf/final)
-	new /obj/effect/temp_visual/cult/blood/out(get_turf(src))
+	new /obj/effect/temp_visual/bloodcult/blood/out(get_turf(src))
 	forceMove(final)
 
 /datum/action/innate/cult/bloodcult/master/finalreck/proc/chant(chant_number)
@@ -454,14 +454,14 @@
 			to_chat(ranged_ability_user,span_bloodcult("<b>You reach through the veil with your mind's eye and seize [target]!</b>"))
 			return
 		else
-			new /obj/effect/temp_visual/cult/sparks(get_turf(attached_action.throwee), ranged_ability_user.dir)
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(attached_action.throwee), ranged_ability_user.dir)
 			var/distance = get_dist(attached_action.throwee, target)
 			if(distance >= 16)
 				return
 			playsound(target,'sound/magic/exit_blood.ogg')
 			attached_action.throwee.Beam(target,icon_state="sendbeam", time = 4)
 			attached_action.throwee.forceMove(get_turf(target))
-			new /obj/effect/temp_visual/cult/sparks(get_turf(target), ranged_ability_user.dir)
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(target), ranged_ability_user.dir)
 			attached_action.throwing = FALSE
 			attached_action.cooldown = world.time + attached_action.base_cooldown
 			remove_ranged_ability(span_bloodcult("A pulse of blood magic surges through you as you shift [attached_action.throwee] through time and space."))

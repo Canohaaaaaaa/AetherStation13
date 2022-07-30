@@ -11,7 +11,7 @@
 	girder_type = /obj/structure/girder/cult
 
 /turf/closed/wall/mineral/cult/Initialize()
-	new /obj/effect/temp_visual/cult/turf(src)
+	new /obj/effect/temp_visual/bloodcult/turf(src)
 	. = ..()
 
 /turf/closed/wall/mineral/cult/devastate_wall()
@@ -32,11 +32,11 @@
 	desc = "A cold stone wall engraved with indecipherable symbols. Studying them causes your head to pound."
 
 /turf/closed/wall/mineral/cult/artificer/break_wall()
-	new /obj/effect/temp_visual/cult/turf(get_turf(src))
+	new /obj/effect/temp_visual/bloodcult/turf(get_turf(src))
 	return null //excuse me we want no runed metal here
 
 /turf/closed/wall/mineral/cult/artificer/devastate_wall()
-	new /obj/effect/temp_visual/cult/turf(get_turf(src))
+	new /obj/effect/temp_visual/bloodcult/turf(get_turf(src))
 
 /turf/closed/wall/vault
 	name = "strange wall"

@@ -308,7 +308,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	else
 		GLOB.sacrificed += sacrificial
 
-	new /obj/effect/temp_visual/cult/sac(get_turf(src))
+	new /obj/effect/temp_visual/bloodcult/sac(get_turf(src))
 	for(var/M in invokers)
 		if(big_sac)
 			to_chat(M, span_bloodcultlarge("\"Yes! This is the one I desire! You have done well.\""))
@@ -362,8 +362,8 @@ structure_check() searches for nearby cultist structures required for the invoca
 	color = RUNE_COLOR_TELEPORT
 	req_keyword = TRUE
 	light_power = 4
-	var/obj/effect/temp_visual/cult/portal/inner_portal //The portal "hint" for off-station teleportations
-	var/obj/effect/temp_visual/cult/rune_spawn/rune2/outer_portal
+	var/obj/effect/temp_visual/bloodcult/portal/inner_portal //The portal "hint" for off-station teleportations
+	var/obj/effect/temp_visual/bloodcult/rune_spawn/rune2/outer_portal
 	var/listkey
 
 
@@ -456,7 +456,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/turf/T = get_turf(src)
 	close_portal() // To avoid stacking descriptions/animations
 	playsound(T, pick('sound/effects/sparks1.ogg', 'sound/effects/sparks2.ogg', 'sound/effects/sparks3.ogg', 'sound/effects/sparks4.ogg'), 100, TRUE, 14)
-	inner_portal = new /obj/effect/temp_visual/cult/portal(T)
+	inner_portal = new /obj/effect/temp_visual/bloodcult/portal(T)
 	if(portal_type == "space")
 		set_light_color(color)
 		desc += "<br><b>A tear in reality reveals a black void interspersed with dots of light... something recently teleported here from space.<br><u>The void feels like it's trying to pull you to the [dir2text(get_dir(T, origin))]!</u></b>"
@@ -952,7 +952,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			images += B
 		if(!IS_CULTIST(M))
 			if(M.client)
-				var/image/C = image('icons/effects/cult_effects.dmi',M,"bloodsparkles", ABOVE_MOB_LAYER)
+				var/image/C = image('icons/effects/bloodcult_effects.dmi',M,"bloodsparkles", ABOVE_MOB_LAYER)
 				add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/cult, "cult_apoc", C, NONE)
 				addtimer(CALLBACK(M,/atom/.proc/remove_alt_appearance,"cult_apoc",TRUE), duration)
 				images += C

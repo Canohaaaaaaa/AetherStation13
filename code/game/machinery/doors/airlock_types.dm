@@ -455,7 +455,7 @@
 	aiControlDisabled = AI_WIRE_DISABLED
 	req_access = list(ACCESS_BLOODCULT)
 	damage_deflection = 10
-	var/openingoverlaytype = /obj/effect/temp_visual/cult/door
+	var/openingoverlaytype = /obj/effect/temp_visual/bloodcult/door
 	var/friendly = FALSE
 	var/stealthy = FALSE
 
@@ -485,7 +485,7 @@
 		return TRUE
 	else
 		if(!stealthy)
-			new /obj/effect/temp_visual/cult/sac(loc)
+			new /obj/effect/temp_visual/bloodcult/sac(loc)
 			var/atom/throwtarget
 			throwtarget = get_edge_target_turf(src, get_dir(src, get_step_away(L, src)))
 			SEND_SOUND(L, sound(pick('sound/hallucinations/turn_around1.ogg','sound/hallucinations/turn_around2.ogg'),0,1,50))
@@ -530,7 +530,7 @@
 	icon = 'icons/obj/doors/airlocks/cult/unruned/cult.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/cult/unruned/overlays.dmi'
 	assemblytype = /obj/structure/door_assembly/door_assembly_cult/unruned
-	openingoverlaytype = /obj/effect/temp_visual/cult/door/unruned
+	openingoverlaytype = /obj/effect/temp_visual/bloodcult/door/unruned
 
 /obj/machinery/door/airlock/cult/unruned/friendly
 	friendly = TRUE

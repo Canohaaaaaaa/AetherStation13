@@ -240,7 +240,7 @@
 				T.ChangeTurf(/turf/open/floor/engine/cult, flags = CHANGETURF_INHERIT_AIR)
 		else if (length(cultturfs))
 			var/turf/open/floor/engine/cult/F = pick(cultturfs)
-			new /obj/effect/temp_visual/cult/turf/floor(F)
+			new /obj/effect/temp_visual/bloodcult/turf/floor(F)
 		else
 			// Are we in space or something? No cult turfs or
 			// convertable turfs?

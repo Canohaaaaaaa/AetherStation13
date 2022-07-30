@@ -146,6 +146,64 @@
 	var/mob/living/victim = target
 	victim.gib()
 
+/datum/action/item_action/clockwork/kindle
+	name = "Kindle"
+	spell_phrase = ""
+	button_icon_state = "magicm"
+	cooldown_duration = 12 SECONDS
+	target_type_whitelist = list(/mob/living)
+	///Stun duration
+	var/duration = 4 SECONDS
+
+/datum/action/item_action/clockwork/kindle/cast(atom/target)
+	var/mob/living/victim = target
+	//TODO.. feedback
+	new /obj/effect/temp_visual/clockcult/kindle(get_turf(victim))
+	victim.Stun(duration)
+	victim.flash_act(override_blindness_check = TRUE, length = duration / 4)
+	victim.Jitter(duration)
+
+/datum/action/item_action/clockwork/electrocute
+	name = "Electrocute"
+	spell_phrase = ""
+	button_icon_state = "lightning"
+	cooldown_duration = 12 SECONDS
+	target_type_whitelist = list(/mob/living)
+	///Knockdown duration
+	var/duration = 2 SECONDS
+	//Shock damage
+	var/damage = 15
+
+/datum/action/item_action/clockwork/electrocute/cast(atom/target)
+	var/mob/living/victim = target
+	//TODO.. feedback
+	var/datum/effect_system/lightning_spread/visual_effect = new /datum/effect_system/lightning_spread
+	visual_effect.set_up(5, TRUE, victim)
+	visual_effect.start()
+	victim.electrocute_act(damage, owner, flags = SHOCK_NOGLOVES | SHOCK_NOSTUN)
+	victim.Knockdown(duration)
+
+/datum/action/item_action/clockwork/ignite
+	name = "Ignite"
+	spell_phrase = ""
+	button_icon_state = "sacredflame"
+	cooldown_duration = 12 SECONDS
+	target_type_whitelist = list(/mob/living)
+	///Hot hot hot
+	var/firestacks = 12
+	///The instant damage inflicted
+	var/damage = 30
+	///How far they're blasted away
+	var/throw_range = 3
+
+/datum/action/item_action/clockwork/ignite/cast(atom/target)
+	var/mob/living/victim = target
+	//TODO.. feedback
+	victim.adjust_fire_stacks(firestacks)
+	victim.IgniteMob()
+	victim.adjustFireLoss(damage)
+	victim.throw_at(get_ranged_target_turf(victim, get_dir(owner, victim), throw_range), throw_range, 1, owner)
+
 /**
  * SELF CAST SPELLS
  */
@@ -215,7 +273,7 @@
 	return ..()
 
 /datum/action/item_action/clockwork/self/rewind/Destroy()
-	UnregisterSignal(usr, COMSIG_MOVABLE_MOVED, .proc/record_move)
+	UnregisterSignal(owner, COMSIG_MOVABLE_MOVED)
 	STOP_PROCESSING(SSprocessing, src)
 	return ..()
 
@@ -237,7 +295,7 @@
 		"blood_volume" = self.blood_volume
 	)
 	stored_states.Insert(1, list(new_state))
-	if(stored_states.len > time_limit / 10)
+	if(stored_states.len > time_limit / 10) //Cut oldest states
 		stored_states.Cut(time_limit / 10 + 1, 0)
 
 /datum/action/item_action/clockwork/self/rewind/cast(atom/target)
@@ -278,7 +336,7 @@
 	)
 	stored_steps.Insert(1, list(new_step_state))
 	stored_states[1]["steps"].Insert(1, list(new_step_state))
-	for(var/i = 1; i <= stored_steps.len; i++)
+	for(var/i = 1; i <= stored_steps.len; i++) //Cut oldest steps
 		if(stored_steps[i]["timestamp"] + time_limit < world.time)
 			stored_steps.Cut(i, 0)
 			return

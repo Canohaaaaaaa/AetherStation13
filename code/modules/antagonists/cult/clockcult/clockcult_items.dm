@@ -90,6 +90,7 @@
 	light_color = LIGHT_COLOR_PURPLE
 	light_power = 1
 	light_range = 2.5
+	change_icons = TRUE
 	var/datum/action/item_action/clockwork/stored_spell
 
 /obj/item/weldingtool/experimental/clockwork/Initialize()

@@ -168,7 +168,7 @@
 /datum/team/cult/proc/ascend(cultist) //TODO.. clockwork halo
 	if(ishuman(cultist))
 		var/mob/living/carbon/human/human = cultist
-		new /obj/effect/temp_visual/cult/sparks(get_turf(human), human.dir)
+		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(human), human.dir)
 		var/istate = pick("halo1","halo2","halo3","halo4","halo5","halo6")
 		var/mutable_appearance/new_halo_overlay = mutable_appearance('icons/effects/32x64.dmi', istate, -HALO_LAYER)
 		human.overlays_standing[HALO_LAYER] = new_halo_overlay

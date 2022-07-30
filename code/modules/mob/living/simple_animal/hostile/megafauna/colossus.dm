@@ -592,7 +592,7 @@ GLOBAL_DATUM(blackbox, /obj/machinery/smartfridge/black_box)
 	if(..())
 		for(var/i in range(1, src))
 			if(isturf(i))
-				new /obj/effect/temp_visual/cult/sparks(i)
+				new /obj/effect/temp_visual/bloodcult/sparks(i)
 				continue
 			if(ishuman(i))
 				var/mob/living/carbon/human/H = i

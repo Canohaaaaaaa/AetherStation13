@@ -39,7 +39,7 @@
 		block_message = "[owner] parries [attack_text] with [src] in their offhand"
 
 	if(IS_CULTIST(owner) && prob(final_block_chance) && attack_type != PROJECTILE_ATTACK)
-		new /obj/effect/temp_visual/cult/sparks(get_turf(owner))
+		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 		playsound(src, 'sound/weapons/parry.ogg', 100, TRUE)
 		owner.visible_message(span_danger("[block_message]"))
 		return TRUE
@@ -74,7 +74,7 @@
 
 /obj/item/melee/cultblade/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(IS_CULTIST(owner) && prob(final_block_chance))
-		new /obj/effect/temp_visual/cult/sparks(get_turf(owner))
+		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 		playsound(src, 'sound/weapons/parry.ogg', 100, TRUE)
 		owner.visible_message(span_danger("[owner] parries [attack_text] with [src]!"))
 		return TRUE
@@ -430,12 +430,12 @@
 /obj/item/clothing/suit/hooded/cultrobes/cult_shield/Initialize()
 	. = ..()
 	// note that these charges don't regenerate
-	AddComponent(/datum/component/shielded, recharge_start_delay = 0, shield_icon_file = 'icons/effects/cult_effects.dmi', shield_icon = "shield-cult", run_hit_callback = CALLBACK(src, .proc/shield_damaged))
+	AddComponent(/datum/component/shielded, recharge_start_delay = 0, shield_icon_file = 'icons/effects/bloodcult_effects.dmi', shield_icon = "shield-cult", run_hit_callback = CALLBACK(src, .proc/shield_damaged))
 
 /// A proc for callback when the shield breaks, since cult robes are stupid and have different effects
 /obj/item/clothing/suit/hooded/cultrobes/cult_shield/proc/shield_damaged(mob/living/wearer, attack_text, new_current_charges)
 	wearer.visible_message(span_danger("[wearer]'s robes neutralize [attack_text] in a burst of blood-red sparks!"))
-	new /obj/effect/temp_visual/cult/sparks(get_turf(wearer))
+	new /obj/effect/temp_visual/bloodcult/sparks(get_turf(wearer))
 	if(new_current_charges == 0)
 		wearer.visible_message(span_danger("The runed shield around [wearer] suddenly disappears!"))
 
@@ -750,7 +750,7 @@
 			T = get_turf(src)
 		if(T)
 			T.visible_message(span_warning("[src] shatters and melts back into blood!"))
-			new /obj/effect/temp_visual/cult/sparks(T)
+			new /obj/effect/temp_visual/bloodcult/sparks(T)
 			new /obj/effect/decal/cleanable/blood/splatter(T)
 			playsound(T, 'sound/effects/glassbr3.ogg', 100)
 	qdel(src)
@@ -762,12 +762,12 @@
 		if(attack_type == PROJECTILE_ATTACK)
 			owner.visible_message(span_danger("[owner] deflects [attack_text] with [src]!"))
 			playsound(get_turf(owner), pick('sound/weapons/bulletflyby.ogg', 'sound/weapons/bulletflyby2.ogg', 'sound/weapons/bulletflyby3.ogg'), 75, TRUE)
-			new /obj/effect/temp_visual/cult/sparks(get_turf(owner))
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 			return TRUE
 		else
 			playsound(src, 'sound/weapons/parry.ogg', 100, TRUE)
 			owner.visible_message(span_danger("[owner] parries [attack_text] with [src]!"))
-			new /obj/effect/temp_visual/cult/sparks(get_turf(owner))
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 			return TRUE
 	else
 		return FALSE
@@ -829,7 +829,7 @@
 
 /obj/item/ammo_casing/magic/arcane_barrage/blood
 	projectile_type = /obj/projectile/magic/arcane_barrage/blood
-	firing_effect_type = /obj/effect/temp_visual/cult/sparks
+	firing_effect_type = /obj/effect/temp_visual/bloodcult/sparks
 
 /obj/projectile/magic/arcane_barrage/blood
 	name = "blood bolt"
@@ -852,7 +852,7 @@
 			var/mob/living/simple_animal/M = target
 			if(M.health+5 < M.maxHealth)
 				M.adjustHealth(-5)
-		new /obj/effect/temp_visual/cult/sparks(T)
+		new /obj/effect/temp_visual/bloodcult/sparks(T)
 		qdel(src)
 	else
 		..()
@@ -914,9 +914,9 @@
 		if(i > 1)
 			sleep(15)
 		if(i < 4)
-			O = new /obj/effect/temp_visual/cult/rune_spawn/rune1/inner(user.loc, 30, "#ff0000")
+			O = new /obj/effect/temp_visual/bloodcult/rune_spawn/rune1/inner(user.loc, 30, "#ff0000")
 		else
-			O = new /obj/effect/temp_visual/cult/rune_spawn/rune5(user.loc, 30, "#ff0000")
+			O = new /obj/effect/temp_visual/bloodcult/rune_spawn/rune5(user.loc, 30, "#ff0000")
 			new /obj/effect/temp_visual/dir_setting/cult/phase/out(user.loc, user.dir)
 	if(O)
 		qdel(O)
@@ -948,7 +948,7 @@
 			T.narsie_act(TRUE, TRUE)
 			for(var/mob/living/target in T.contents)
 				if(IS_CULTIST(target))
-					new /obj/effect/temp_visual/cult/sparks(T)
+					new /obj/effect/temp_visual/bloodcult/sparks(T)
 					if(ishuman(target))
 						var/mob/living/carbon/human/H = target
 						if(H.stat != DEAD)
@@ -996,7 +996,7 @@
 				if(P.damage >= 30)
 					var/turf/T = get_turf(owner)
 					T.visible_message(span_warning("The sheer force from [P] shatters the mirror shield!"))
-					new /obj/effect/temp_visual/cult/sparks(T)
+					new /obj/effect/temp_visual/bloodcult/sparks(T)
 					playsound(T, 'sound/effects/glassbr3.ogg', 100)
 					owner.Paralyze(25)
 					qdel(src)
