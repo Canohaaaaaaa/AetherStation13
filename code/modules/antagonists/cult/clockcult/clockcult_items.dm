@@ -41,8 +41,14 @@
 /obj/item/melee/clockwork_spear/Initialize()
 	. = ..()
 	//TODO.. butchering?
-	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/melee/clockwork_spear/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 
 /obj/item/melee/clockwork_spear/attack_self(mob/user, modifiers)
 	on = !on
@@ -73,13 +79,6 @@
 		qdel(stored_spell)
 	stored_spell = spell
 
-/obj/item/melee/clockwork_spear/proc/cast_spell(datum/source, atom/target, mob/user, params)
-	if(!stored_spell)
-		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
-	if(stored_spell.spell_trigger(target))
-		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
-	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
-
 ///Has the special recharging property of the experimental while being slightly slower
 /obj/item/weldingtool/experimental/clockwork
 	name = "WIP"
@@ -96,7 +95,6 @@
 /obj/item/weldingtool/experimental/clockwork/Initialize()
 	. = ..()
 	//TODO.. butchering?
-	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
 /obj/item/weldingtool/experimental/clockwork/proc/spell_link(source, spell)
@@ -104,7 +102,7 @@
 		qdel(stored_spell)
 	stored_spell = spell
 
-/obj/item/weldingtool/experimental/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+/obj/item/weldingtool/experimental/clockwork/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!stored_spell)
 		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 	if(stored_spell.spell_trigger(target))
@@ -123,8 +121,14 @@
 
 /obj/item/crowbar/power/clockwork/Initialize()
 	. = ..()
-	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/crowbar/power/clockwork/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 
 /obj/item/crowbar/power/clockwork/proc/spell_link(source, spell)
 	if(stored_spell)
@@ -132,13 +136,6 @@
 	stored_spell = spell
 	icon_state_cutter = "jaws_cutter_brass_powered"
 	icon_state_crowbar = "jaws_pry_brass_powered"
-
-/obj/item/crowbar/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
-	if(!stored_spell)
-		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
-	if(stored_spell.spell_trigger(target))
-		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
-	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 
 /obj/item/screwdriver/power/clockwork
 	name = "WIP"
@@ -149,7 +146,6 @@
 
 /obj/item/screwdriver/power/clockwork/Initialize()
 	. = ..()
-	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
 
 /obj/item/screwdriver/power/clockwork/attack_self(mob/user)
@@ -163,17 +159,18 @@
 		balloon_alert(user, "attached screw bit")
 		icon_state = "brassdrill_screw"
 
-/obj/item/screwdriver/power/clockwork/proc/spell_link(source, spell)
-	if(stored_spell)
-		qdel(stored_spell)
-	stored_spell = spell
-
-/obj/item/screwdriver/power/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
+/obj/item/screwdriver/power/clockwork/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!stored_spell)
 		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 	if(stored_spell.spell_trigger(target))
 		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
 	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+
+/obj/item/screwdriver/power/clockwork/proc/spell_link(source, spell)
+	if(stored_spell)
+		qdel(stored_spell)
+	stored_spell = spell
+
 
 /obj/item/multitool/clockwork
 	name = "WIP"
@@ -187,17 +184,17 @@
 
 /obj/item/multitool/clockwork/Initialize()
 	. = ..()
-	RegisterSignal(src, COMSIG_ITEM_PRE_ATTACK_SECONDARY, .proc/cast_spell)
 	RegisterSignal(src, COMSIG_ITEM_WEAVE_SPELL, .proc/spell_link)
+
+/obj/item/multitool/clockwork/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!stored_spell)
+		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
+	if(stored_spell.spell_trigger(target))
+		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
+	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
 
 /obj/item/multitool/clockwork/proc/spell_link(source, spell)
 	if(stored_spell)
 		qdel(stored_spell)
 	stored_spell = spell
 
-/obj/item/multitool/clockwork/proc/cast_spell(datum/source, atom/target, mob/user, params)
-	if(!stored_spell)
-		return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN
-	if(stored_spell.spell_trigger(target))
-		return COMPONENT_SECONDARY_CANCEL_ATTACK_CHAIN
-	return COMPONENT_SECONDARY_CONTINUE_ATTACK_CHAIN

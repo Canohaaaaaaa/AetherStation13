@@ -44,6 +44,8 @@
 	icon_icon = 'icons/mob/actions/actions_spells.dmi'
 	background_icon_state = "bg_clock"
 	check_flags = AB_CHECK_HANDS_BLOCKED|AB_CHECK_CONSCIOUS|AB_CHECK_IMMOBILE
+	///Should you be able to target non-adjacent atoms?
+	var/ranged = FALSE
 	///What the owner should say when successfully casting the spell
 	var/spell_phrase
 	///
@@ -118,6 +120,8 @@
 /datum/action/item_action/clockwork/proc/can_cast(atom/target)
 	SHOULD_CALL_PARENT(TRUE)
 	if(!IsAvailable())
+		return FALSE
+	if(!ranged && !owner.CanReach(target))
 		return FALSE
 	//TODO.. chat cue
 	for(var/type in target_type_whitelist)
@@ -204,6 +208,122 @@
 	victim.adjustFireLoss(damage)
 	victim.throw_at(get_ranged_target_turf(victim, get_dir(owner, victim), throw_range), throw_range, 1, owner)
 
+/datum/action/item_action/clockwork/abduct
+	name = "Abduct"
+	spell_phrase = ""
+	button_icon_state = "tentacle"
+	icon_icon = 'icons/mob/actions/actions_changeling.dmi'
+	cooldown_duration = 120 SECONDS
+	ranged = TRUE
+	target_type_whitelist = list(/atom)
+
+/datum/action/item_action/clockwork/abduct/cast(atom/target)
+	var/obj/item/ammo_casing/magic/tentacle/brass_hook/hook = new
+	hook.fire_casing(target, owner, null, 0, FALSE, "", 0, src)
+	qdel(hook)
+
+/obj/item/ammo_casing/magic/tentacle/brass_hook
+	name = "hook"
+	desc = "A brass hook with a chain of cogs."
+	projectile_type = /obj/projectile/brass_hook
+
+/obj/projectile/brass_hook
+	name = "brass hook"
+	icon_state = "brass_hook"
+	pass_flags = PASSTABLE
+	damage = 0
+	range = 8
+	hitsound = 'sound/weapons/thudswoosh.ogg'
+	var/chain
+
+/obj/projectile/brass_hook/fire(setAngle)
+	if(firer)
+		chain = firer.Beam(src, icon_state = "cog_chain")
+	..()
+
+/obj/projectile/brass_hook/Destroy()
+	qdel(chain)
+	return ..()
+
+/obj/projectile/brass_hook/on_hit(atom/target, blocked = FALSE)
+	var/mob/living/carbon/human/thief = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK
+	if(isitem(target))
+		var/obj/item/grabbed_item = target
+		if(grabbed_item.anchored)
+			return BULLET_ACT_BLOCK
+		if(thief.get_active_held_item()) //We have our spell-woven tool inhand, hopefully our other hand is empty
+			thief.swap_hand()
+		to_chat(firer, span_notice("You pull [grabbed_item] towards yourself."))
+		thief.throw_mode_on(THROW_MODE_TOGGLE)
+		grabbed_item.throw_at(thief, 10, 2)
+		return BULLET_ACT_HIT
+	else if(!isliving(target))
+		return BULLET_ACT_BLOCK
+
+	var/mob/living/living_victim = target
+	if(living_victim.anchored || living_victim.throwing)//avoid double hits
+		return BULLET_ACT_BLOCK
+	if(iscarbon(living_victim))
+		var/mob/living/carbon/carbon_victim = living_victim
+		var/obj/item/stolen_item
+		if(carbon_victim.get_active_held_item())
+			stolen_item = carbon_victim.get_active_held_item()
+		else
+			stolen_item = carbon_victim.get_inactive_held_item()
+		if(stolen_item) //Something inhand to steal
+			if(carbon_victim.dropItemToGround(stolen_item))
+				carbon_victim.visible_message(span_danger("[stolen_item] is yanked off [carbon_victim]'s hand by [src]!"),span_userdanger("A claw pulls [stolen_item] away from you!"))
+				on_hit(stolen_item)
+				return BULLET_ACT_HIT
+			else
+				to_chat(firer, span_warning("You can't seem to pry [stolen_item] off [carbon_victim]'s hands!"))
+				return BULLET_ACT_BLOCK
+		//nothing to steal inhand, let's grab them
+		carbon_victim.visible_message(span_danger("[living_victim] is grabbed by a claw!"),span_userdanger("A claw grabs you and pulls you towards [thief]!"))
+		carbon_victim.throw_at(get_step_towards(thief,carbon_victim), 8, 2, thief, TRUE, TRUE, callback=CALLBACK(src, .proc/brass_hook_grab, thief, carbon_victim))
+		return BULLET_ACT_HIT
+	else
+		living_victim.visible_message(span_danger("[living_victim] is pulled by a claw!"), span_userdanger("A claw grabs you and pulls you towards [thief]!"))
+		living_victim.throw_at(get_step_towards(thief, living_victim), 8, 2, callback=CALLBACK(src, .proc/brass_hook_grab, thief, living_victim))
+		return BULLET_ACT_HIT
+
+/obj/projectile/brass_hook/proc/brass_hook_grab(mob/living/carbon/source, mob/living/target)
+	if(!source.Adjacent(target))
+		return
+	if(source.get_inactive_held_item())
+		source.swap_hand()
+	target.grabbedby(source)
+	target.grippedby(source, instant = TRUE)
+
+/datum/action/item_action/clockwork/translocate
+	name = "Translocate"
+	spell_phrase = ""
+	button_icon_state = "repulse"
+	cooldown_duration = 120 SECONDS
+	ranged = TRUE
+	target_type_whitelist = list(/mob)
+
+/datum/action/item_action/clockwork/translocate/cast(atom/target)
+	var/turf/target_turf = get_turf(target)
+	var/turf/owner_turf = get_turf(owner)
+	do_teleport(owner, target_turf, asoundin = 'sound/effects/phasein.ogg')
+	do_teleport(target, owner_turf, asoundin = 'sound/effects/phasein.ogg')
+
+/datum/action/item_action/clockwork/apprehend
+	name = "Apprehend"
+	spell_phrase = ""
+	button_icon_state = "apprehend"
+	icon_icon = 'icons/mob/actions/actions_cult.dmi'
+	cooldown_duration = 30 SECONDS
+	target_type_whitelist = list(/mob/living)
+	var/duration = 10 SECONDS
+
+/datum/action/item_action/clockwork/apprehend/cast(atom/target)
+	var/mob/living/victim = target
+	//is_convertable_to_cult(target, owner.cult) TODO.. mindshield tests
+	victim.Immobilize(duration)
 /**
  * SELF CAST SPELLS
  */
