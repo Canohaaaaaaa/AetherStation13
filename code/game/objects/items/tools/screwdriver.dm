@@ -110,10 +110,12 @@
 		tool_behaviour = TOOL_WRENCH
 		balloon_alert(user, "attached bolt bit")
 		icon_state = "drill_bolt"
+		update_appearance()
 	else
 		tool_behaviour = TOOL_SCREWDRIVER
 		balloon_alert(user, "attached screw bit")
 		icon_state = "drill_screw"
+		update_appearance()
 
 /obj/item/screwdriver/cyborg
 	name = "automated screwdriver"

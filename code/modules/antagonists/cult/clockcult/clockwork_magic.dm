@@ -6,7 +6,6 @@
 /proc/clockwork_spellweaver(obj/item/target_item, datum/action/item_action/clockwork/choosen_spell, mob/owner)
 	var/datum/action/item_action/clockwork/spell = new choosen_spell(target_item)
 	spell.Grant(owner)
-	target_item.icon_state = "[initial(target_item.icon_state)]_powered"
 	spell.update_item_overlays()
 	SEND_SIGNAL(target_item, COMSIG_ITEM_WEAVE_SPELL, spell)
 
@@ -56,7 +55,29 @@
 	var/cooldown_duration
 	///What types can we cast this on
 	var/list/target_type_whitelist = list()
+	///What color should the energy overlay be
+	var/spell_color = "#ce2121"
+	///This item has a spell
+	var/mutable_appearance/powered_overlay
+	///This item spell is ready
+	var/mutable_appearance/ready_overlay
 	COOLDOWN_DECLARE(spell_cooldown)
+
+/datum/action/item_action/clockwork/New(Target)
+	. = ..()
+	RegisterSignal(target, COMSIG_ATOM_UPDATE_APPEARANCE, .proc/update_item_overlays)
+	ready_overlay = mutable_appearance('icons/obj/clocktools.dmi', "[target.icon_state]_glow")
+	ready_overlay.appearance_flags |= RESET_COLOR
+	ready_overlay.color = spell_color
+	powered_overlay = mutable_appearance('icons/obj/clocktools.dmi', "[target.icon_state]_powered")
+	powered_overlay.appearance_flags |= RESET_COLOR
+	powered_overlay.color = spell_color
+	target.add_overlay(powered_overlay)
+
+/datum/action/item_action/clockwork/Destroy()
+	target.cut_overlay(powered_overlay)
+	target.cut_overlay(ready_overlay)
+	return ..()
 
 //Duplicate code yikes TODO..
 /datum/action/item_action/clockwork/ApplyIcon(atom/movable/screen/movable/action_button/current_button, force = FALSE)
@@ -64,10 +85,6 @@
 		current_button.cut_overlays(TRUE)
 		current_button.add_overlay(mutable_appearance(icon_icon, button_icon_state))
 		current_button.button_icon_state = button_icon_state
-
-/datum/action/item_action/clockwork/OnUpdatedIcon()
-	. = ..()
-	update_item_overlays()
 
 /datum/action/item_action/clockwork/Grant()
 	..()
@@ -88,6 +105,7 @@
 	if(!COOLDOWN_FINISHED(src, spell_cooldown))
 		//TODO.. chat cue
 		return FALSE
+
 ///make this generic or something idk
 /datum/action/item_action/clockwork/proc/positioning()
 	var/list/screen_loc_split = splittext(button.screen_loc,",")
@@ -107,15 +125,16 @@
 	if(!can_cast(target))
 		return FALSE
 	COOLDOWN_START(src, spell_cooldown, cooldown_duration)
-	addtimer(CALLBACK(src, .proc/end_cooldown), cooldown_duration + 0.1) //TODO.. this
-	update_item_overlays()
+	addtimer(CALLBACK(src, .proc/end_cooldown), cooldown_duration + 0.1)
 	UpdateButtonIcon(status_only = TRUE)
+	update_item_overlays()
 	owner.say(spell_phrase)
 	cast(target)
 
+
 /datum/action/item_action/clockwork/proc/end_cooldown()
-	update_item_overlays()
 	UpdateButtonIcon(status_only = TRUE)
+	target.update_appearance()
 
 /datum/action/item_action/clockwork/proc/can_cast(atom/target)
 	SHOULD_CALL_PARENT(TRUE)
@@ -133,11 +152,16 @@
 	return
 
 /datum/action/item_action/clockwork/proc/update_item_overlays()
-	var/spell_ready_overlay = "[target.icon_state]_glow"
-	if(COOLDOWN_FINISHED(src, spell_cooldown))
-		target.add_overlay(spell_ready_overlay)
-	else
-		target.cut_overlay(spell_ready_overlay)
+	SIGNAL_HANDLER
+	if(!COOLDOWN_FINISHED(src, spell_cooldown))
+		target.cut_overlay(ready_overlay)
+		return
+	target.cut_overlay(ready_overlay)
+	var/mutable_appearance/new_ready_overlay = mutable_appearance('icons/obj/clocktools.dmi', "[target.icon_state]_glow")
+	new_ready_overlay.appearance_flags |= RESET_COLOR
+	new_ready_overlay.color = spell_color
+	ready_overlay = new_ready_overlay
+	target.add_overlay(ready_overlay)
 
 /datum/action/item_action/clockwork/bogus
 	name = "Debug clockwork action"
@@ -156,6 +180,7 @@
 	button_icon_state = "magicm"
 	cooldown_duration = 12 SECONDS
 	target_type_whitelist = list(/mob/living)
+	spell_color = "#d000ff"
 	///Stun duration
 	var/duration = 4 SECONDS
 
@@ -173,6 +198,7 @@
 	button_icon_state = "lightning"
 	cooldown_duration = 12 SECONDS
 	target_type_whitelist = list(/mob/living)
+	spell_color = "#ffee00"
 	///Knockdown duration
 	var/duration = 2 SECONDS
 	//Shock damage
@@ -193,6 +219,7 @@
 	button_icon_state = "sacredflame"
 	cooldown_duration = 12 SECONDS
 	target_type_whitelist = list(/mob/living)
+	spell_color = "#ff8c00"
 	///Hot hot hot
 	var/firestacks = 12
 	///The instant damage inflicted
@@ -216,6 +243,7 @@
 	cooldown_duration = 120 SECONDS
 	ranged = TRUE
 	target_type_whitelist = list(/atom)
+	spell_color = "#9d00ff"
 
 /datum/action/item_action/clockwork/abduct/cast(atom/target)
 	var/obj/item/ammo_casing/magic/tentacle/brass_hook/hook = new
@@ -304,6 +332,7 @@
 	cooldown_duration = 120 SECONDS
 	ranged = TRUE
 	target_type_whitelist = list(/mob)
+	spell_color = "#001aff"
 
 /datum/action/item_action/clockwork/translocate/cast(atom/target)
 	var/turf/target_turf = get_turf(target)
@@ -314,16 +343,58 @@
 /datum/action/item_action/clockwork/apprehend
 	name = "Apprehend"
 	spell_phrase = ""
-	button_icon_state = "apprehend"
+	button_icon_state = "time"
 	icon_icon = 'icons/mob/actions/actions_cult.dmi'
 	cooldown_duration = 30 SECONDS
 	target_type_whitelist = list(/mob/living)
 	var/duration = 10 SECONDS
+	spell_color = "#00ff26"
 
 /datum/action/item_action/clockwork/apprehend/cast(atom/target)
 	var/mob/living/victim = target
 	//is_convertable_to_cult(target, owner.cult) TODO.. mindshield tests
 	victim.Immobilize(duration)
+
+/datum/action/item_action/clockwork/force_wall
+	name = "Force Wall"
+	spell_phrase = ""
+	button_icon_state = "cultforcewall"
+	icon_icon = 'icons/mob/actions/actions_cult.dmi'
+	cooldown_duration = 30 SECONDS
+	target_type_whitelist = list(/turf/open)
+	var/duration = 10 SECONDS
+	spell_color = "#ff8800"
+
+/datum/action/item_action/clockwork/force_wall/cast(atom/target)
+	var/target_dir = get_dir(owner, target)
+	var/turf/tile_1 = get_step(owner, target_dir)
+	var/turf/tile_2
+	var/turf/tile_3
+	switch(target_dir) //TODO.. redo this garbage
+		if(NORTH,SOUTH)
+			tile_2 = locate(tile_1.x-1, tile_1.y, tile_1.z)
+			tile_3 = locate(tile_1.x+1, tile_1.y, tile_1.z)
+		if(EAST,WEST)
+			tile_2 = locate(tile_1.x, tile_1.y+1, tile_1.z)
+			tile_3 = locate(tile_1.x, tile_1.y-1, tile_1.z)
+		if(NORTHEAST)
+			tile_2 = locate(tile_1.x, tile_1.y-1, tile_1.z)
+			tile_3 = locate(tile_1.x-1, tile_1.y, tile_1.z)
+		if(NORTHWEST)
+			tile_2 = locate(tile_1.x, tile_1.y-1, tile_1.z)
+			tile_3 = locate(tile_1.x+1, tile_1.y, tile_1.z)
+		if(SOUTHEAST)
+			tile_2 = locate(tile_1.x, tile_1.y+1, tile_1.z)
+			tile_3 = locate(tile_1.x-1, tile_1.y, tile_1.z)
+		if(SOUTHWEST)
+			tile_2 = locate(tile_1.x, tile_1.y+1, tile_1.z)
+			tile_3 = locate(tile_1.x+1, tile_1.y, tile_1.z)
+	var/obj/effect/forcefield/clockcult/wall_1 = new(tile_1)
+	var/obj/effect/forcefield/clockcult/wall_2 = new(tile_2)
+	var/obj/effect/forcefield/clockcult/wall_3 = new(tile_3)
+	animate(wall_1, duration, transform = matrix().Turn(181))
+	animate(wall_2, duration, transform = matrix().Turn(179))
+	animate(wall_3, duration, transform = matrix().Turn(181))
 /**
  * SELF CAST SPELLS
  */

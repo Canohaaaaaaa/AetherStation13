@@ -16,6 +16,15 @@
 /obj/effect/forcefield/singularity_pull()
 	return
 
+/obj/effect/forcefield/clockcult
+	desc = "The cogs of a machine you cannot comprehend."
+	name = "Shifting gear"
+	icon = 'icons/obj/clockwork_objects.dmi'
+	icon_state = "wall_gear"
+	CanAtmosPass = ATMOS_PASS_NO
+	timeleft = 10 SECONDS
+	alpha = 200
+
 /obj/effect/forcefield/cult
 	desc = "An unholy shield that blocks all attacks."
 	name = "glowing wall"

@@ -134,8 +134,6 @@
 	if(stored_spell)
 		qdel(stored_spell)
 	stored_spell = spell
-	icon_state_cutter = "jaws_cutter_brass_powered"
-	icon_state_crowbar = "jaws_pry_brass_powered"
 
 /obj/item/screwdriver/power/clockwork
 	name = "WIP"
@@ -154,10 +152,12 @@
 		tool_behaviour = TOOL_WRENCH
 		balloon_alert(user, "attached bolt bit")
 		icon_state = "brassdrill_bolt"
+		update_appearance()
 	else
 		tool_behaviour = TOOL_SCREWDRIVER
 		balloon_alert(user, "attached screw bit")
 		icon_state = "brassdrill_screw"
+		update_appearance()
 
 /obj/item/screwdriver/power/clockwork/afterattack_secondary(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!stored_spell)
