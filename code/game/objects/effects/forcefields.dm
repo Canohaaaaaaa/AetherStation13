@@ -21,9 +21,8 @@
 	name = "Shifting gear"
 	icon = 'icons/obj/clockwork_objects.dmi'
 	icon_state = "wall_gear"
-	CanAtmosPass = ATMOS_PASS_NO
 	timeleft = 10 SECONDS
-	alpha = 200
+	alpha = 180
 
 /obj/effect/forcefield/cult
 	desc = "An unholy shield that blocks all attacks."
