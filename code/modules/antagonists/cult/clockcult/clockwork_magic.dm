@@ -401,7 +401,7 @@
 	animate(wall_1, duration, transform = matrix().Turn(179), flags = ANIMATION_PARALLEL)
 	animate(wall_2, duration, transform = matrix().Turn(181), flags = ANIMATION_PARALLEL)
 	animate(wall_3, duration, transform = matrix().Turn(181), flags = ANIMATION_PARALLEL)
-	animate(rotate_gear_1, duration, transform = matrix().Turn(179), flags = ANIMATION_PARALLEL)
+	//animate(rotate_gear_1, duration, transform = matrix().Turn(179), flags = ANIMATION_PARALLEL)
 	//animate(rotate_gear_2, duration, transform = matrix().Turn(181), flags = ANIMATION_PARALLEL)
 	//animate(rotate_gear_3, duration, transform = matrix().Turn(181), flags = ANIMATION_PARALLEL)
 /**
