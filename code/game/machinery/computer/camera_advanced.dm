@@ -45,6 +45,8 @@
 
 /obj/machinery/computer/camera_advanced/syndie/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	return //For syndie nuke shuttle, to spy for station.
+/obj/machinery/computer/camera_advanced/clockcult_mass_teleporter/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
+	return //For clockie shuttle.
 
 /obj/machinery/computer/camera_advanced/proc/CreateEye()
 	eyeobj = new()

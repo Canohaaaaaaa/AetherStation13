@@ -1,5 +1,6 @@
 GLOBAL_LIST_EMPTY(clockcult_anchors)
 GLOBAL_LIST_EMPTY(clockcult_relays)
+GLOBAL_LIST_EMPTY(clockcult_telepads)
 
 /proc/get_valid_clockcult_anchors()
 	var/list/result = list()
@@ -134,6 +135,7 @@ GLOBAL_LIST_EMPTY(clockcult_relays)
 	name = "mass teleporter"
 	desc = "Controls The Revenant teleporter pads, allowing to teleport multiple individuals at the same time and at the same place. One way trip only." //TODO.. ship name
 	use_power = NO_POWER_USE
+	networks = list("ss13", "abductor") //TODO.. this
 	interaction_flags_atom = INTERACT_ATOM_ATTACK_HAND | INTERACT_ATOM_REQUIRES_ANCHORED
 	var/datum/action/innate/clockcult_mass_teleport/beam_down = new
 
@@ -161,9 +163,18 @@ GLOBAL_LIST_EMPTY(clockcult_relays)
 		to_chat(owner, span_warning("The anchors are cooling off!"))
 		return
 	COOLDOWN_START(src, cooldown, cooldown_duration)
-	for(var/obj/machinery/clockcult_telepad/pad in GLOB.machines)
-		if(GLOB.cameranet.checkTurfVis(owner.remote_control.loc))
-			pad.prime(owner.remote_control.loc, cooldown_duration)
+	var/line_count = round(GLOB.clockcult_telepads.len / 3 + 1)
+	var/list/turf/result_turfs = list()
+	for(var/target_y = owner.remote_control.y; target_y > owner.remote_control.y - line_count; target_y--) //TODO.. holy check
+		for(var/target_x = owner.remote_control.x - 1; target_x < owner.remote_control.x + 2; target_x++)
+			var/turf/target_turf = locate(target_x, target_y, owner.remote_control.z)
+			if(GLOB.cameranet.checkTurfVis(target_turf) && !istype(target_turf, /turf/closed))
+				result_turfs += target_turf
+
+	for(var/i = 1; i <= min(result_turfs.len, GLOB.clockcult_telepads.len); i++)
+		var/obj/machinery/clockcult_telepad/pad = GLOB.clockcult_telepads[i]
+		var/turf/target = result_turfs[i]
+		pad.prime(target, cooldown_duration)
 
 /obj/machinery/clockcult_telepad
 	name = "synchronous anchor"
@@ -172,11 +183,20 @@ GLOBAL_LIST_EMPTY(clockcult_relays)
 	icon_state = "tele_pad"
 	use_power = NO_POWER_USE
 
+/obj/machinery/clockcult_telepad/Initialize()
+	. = ..()
+	GLOB.clockcult_telepads += src
+
+/obj/machinery/clockcult_telepad/Destroy()
+	. = ..()
+	GLOB.clockcult_telepads -= src
+
 /obj/machinery/clockcult_telepad/proc/restore()
 	icon_state = initial(icon_state)
 
 /obj/machinery/clockcult_telepad/proc/prime(turf/target, cooldown)
 	icon_state = "tele_pad_primed"
+	new /obj/effect/temp_visual/clockcult/teleport_in(target)
 	//TODO.. fluff
 	addtimer(CALLBACK(src, .proc/teleport, target, cooldown), 5 SECONDS, TIMER_UNIQUE | TIMER_STOPPABLE)
 

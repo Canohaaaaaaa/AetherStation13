@@ -2,13 +2,16 @@
 "d" = (/obj/machinery/computer/shuttle/clockcult,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "h" = (/turf/closed/wall/mineral/clockcult,/area/shuttle/clockcult)
 "i" = (/obj/machinery/door/airlock/clockcult,/obj/machinery/door/airlock/clockcult/seethru,/obj/machinery/door/airlock/clockcult/seethru,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
+"m" = (/obj/machinery/clockcult_telepad,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 "p" = (/obj/machinery/door/airlock/clockcult/seethru,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
+"q" = (/obj/machinery/clockcult_telepad,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "r" = (/obj/machinery/light/directional/west{dir = 4},/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 "u" = (/obj/machinery/light/directional/west,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 "w" = (/turf/open/space/basic,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "x" = (/obj/machinery/door/airlock/clockcult,/turf/closed/wall/mineral/clockcult,/area/shuttle/clockcult)
 "y" = (/obj/machinery/light/directional/west{dir = 1},/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 "A" = (/turf/open/floor/clockcult,/area/shuttle/clockcult)
+"C" = (/obj/machinery/clockcult_telepad,/obj/machinery/clockcult_telepad,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "E" = (/obj/machinery/door/airlock/clockcult/seethru,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "F" = (/obj/structure/window/bronze/fulltile,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 "H" = (/obj/machinery/door/airlock/clockcult/seethru,/turf/closed/wall/mineral/clockcult,/area/shuttle/clockcult)
@@ -17,6 +20,7 @@
 "P" = (/obj/machinery/light/directional/west,/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "R" = (/obj/machinery/light/directional/west{dir = 4},/turf/open/floor/clockcult,/area/shuttle/clockcult)
 "T" = (/obj/machinery/door/airlock/clockcult,/obj/docking_port/mobile/clockcult{dir = 8; width = 20; height = 25; dwidth = 14; dheight = 5},/turf/closed/wall/mineral/clockcult,/area/shuttle/clockcult)
+"U" = (/obj/machinery/computer/camera_advanced/clockcult_mass_teleporter,/turf/open/floor/clockcult/filled,/area/shuttle/clockcult)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaa
@@ -36,10 +40,10 @@ ahhhhhAyAJhJAyAhhhhha
 ahhhhAJAJAhAJAJAhhhha
 ahhhhJAJAJhJAJAJhhhha
 ahhhhhhOihhhpEhhhhhha
-ahhhhAAJAJhJAJAJhhhha
-ahhhhAJAJAhAJAJAhhhha
-ahhhhuAJArhuAJArhhhha
-ahhhhAJAJAhAJAJAhhhha
+ahhhhAAJAJhJAUAJhhhha
+ahhhhAJAJAhAmqmAhhhha
+ahhhhuAJArhuqmCrhhhha
+ahhhhAJAJAhAmqmAhhhha
 ahhhhhhJAJhJAJhhhhhha
 ahaahahAJAhAJAhahaaha
 aaaaaahhxhhhxhhaaaaaa
