@@ -467,7 +467,7 @@
 	if(!C)
 		return
 	var/datum/team/cult/bloodcult/cult_team = C.cult_team //Safe caste, clockcult can't make constructs
-	var/datum/objective/eldergod/summon_objective = locate() in cult_team.objectives
+	var/datum/objective/geometer/summon_objective = locate() in cult_team.objectives
 
 	if(summon_objective.check_completion())
 		the_construct.master = cult_team.blood_target

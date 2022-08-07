@@ -154,7 +154,7 @@
 	if(!antag)
 		return
 	var/place = get_area(owner)
-	var/datum/objective/eldergod/summon_objective = locate() in antag.cult_team.objectives
+	var/datum/objective/geometer/summon_objective = locate() in antag.cult_team.objectives
 	if(place in summon_objective.summon_spots)//cant do final reckoning in the summon area to prevent abuse, you'll need to get everyone to stand on the circle!
 		to_chat(owner, span_bloodcultlarge("The veil is too weak here! Move to an area where it is strong enough to support this magic."))
 		return

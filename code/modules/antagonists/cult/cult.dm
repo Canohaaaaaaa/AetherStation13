@@ -117,6 +117,9 @@
 	silent = TRUE
 	return ..()
 
+/datum/objective/sacrifice
+	var/sacced = FALSE
+	var/sac_image
 /datum/team/cult
 	name = "Cult"
 
@@ -126,6 +129,7 @@
 	var/reckoning_complete = FALSE
 	var/cult_risen = FALSE
 	var/cult_ascendent = FALSE
+	var/cult_team_type = /datum/antagonist/cult
 
 /datum/team/cult/proc/check_size()
 	if(cult_ascendent)
@@ -135,7 +139,7 @@
 	for(var/I in GLOB.player_list)
 		var/mob/M = I
 		if(M.stat != DEAD)
-			if(IS_CULTIST(M))
+			if(M?.mind?.has_antag_datum(cult_team_type))
 				++cultplayers
 			else
 				++alive
@@ -152,7 +156,7 @@
 		for(var/datum/mind/B in members)
 			if(B.current)
 				SEND_SOUND(B.current, 'sound/hallucinations/im_here1.ogg')
-				to_chat(B.current, span_bloodcultlarge("<span class='warningplain'>Your cult is ascendent and the red harvest approaches - you cannot hide your true nature for much longer!!</span>"))
+				to_chat(B.current, span_bloodcultlarge("<span class='warningplain'>Your cult is ascendent and the [cult_team_type == /datum/team/cult/bloodcult ? "red harvest" : "reckoning"] approaches - you cannot hide your true nature for much longer!!</span>"))
 				addtimer(CALLBACK(src, .proc/ascend, B.current), 200)
 		cult_ascendent = TRUE
 
@@ -163,12 +167,13 @@
 		H.eye_color = rise_eye_color
 		H.dna.update_ui_block(DNA_EYE_COLOR_BLOCK)
 		ADD_TRAIT(H, TRAIT_CULT_EYES, CULT_TRAIT) //TODO.. redo the trait check to make sense flavour-wise
-		H.update_body()
+		H.update_body() //TODO.. change borgs headlight
 
 /datum/team/cult/proc/ascend(cultist) //TODO.. clockwork halo
 	if(ishuman(cultist))
 		var/mob/living/carbon/human/human = cultist
-		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(human), human.dir)
+		if(IS_CULTIST_BLOOD(human)) //TODO.. clock ascend effect
+			new /obj/effect/temp_visual/bloodcult/sparks(get_turf(human), human.dir)
 		var/istate = pick("halo1","halo2","halo3","halo4","halo5","halo6")
 		var/mutable_appearance/new_halo_overlay = mutable_appearance('icons/effects/32x64.dmi', istate, -HALO_LAYER)
 		human.overlays_standing[HALO_LAYER] = new_halo_overlay
@@ -186,76 +191,11 @@
 	reshape.Crop(-5,-3,26,30)
 	sac_objective.sac_image = reshape
 
-/datum/objective/sacrifice/find_target(dupe_search_range)
-	if(!istype(team, /datum/team/cult))
-		return
-	var/datum/team/cult/cult = team
-	var/list/target_candidates = list()
-	for(var/mob/living/carbon/human/player in GLOB.player_list)
-		if(player.mind && !player.mind.has_antag_datum(/datum/antagonist/cult) && !is_convertable_to_cult(player) && player.stat != DEAD)
-			target_candidates += player.mind
-	if(target_candidates.len == 0)
-		message_admins("Cult Sacrifice: Could not find unconvertible target, checking for convertible target.")
-		for(var/mob/living/carbon/human/player in GLOB.player_list)
-			if(player.mind && !player.mind.has_antag_datum(/datum/antagonist/cult) && player.stat != DEAD)
-				target_candidates += player.mind
-	list_clear_nulls(target_candidates)
-	if(LAZYLEN(target_candidates))
-		target = pick(target_candidates)
-		update_explanation_text()
-	else
-		message_admins("Cult Sacrifice: Could not find unconvertible or convertible target. WELP!")
-	cult.make_image(src)
-	for(var/datum/mind/mind in cult.members)
-		if(mind.current)
-			mind.current.clear_alert("bloodsense")
-			mind.current.throw_alert("bloodsense", /atom/movable/screen/alert/bloodsense)
-
 /datum/team/cult/proc/setup_objectives()
 	var/datum/objective/sacrifice/sacrifice_objective = new
 	sacrifice_objective.team = src
 	sacrifice_objective.find_target()
 	objectives += sacrifice_objective
-
-	var/datum/objective/eldergod/summon_objective = new
-	summon_objective.team = src
-	objectives += summon_objective
-
-/datum/objective/sacrifice
-	var/sacced = FALSE
-	var/sac_image
-
-/datum/objective/sacrifice/check_completion()
-	return sacced || completed
-
-/datum/objective/sacrifice/update_explanation_text() //TODO.. more flavour
-	if(target)
-		explanation_text = "Sacrifice [target], the [target.assigned_role.title] via invoking an Offer rune with [target.p_them()] on it and three acolytes around it."
-	else
-		explanation_text = "The veil has already been weakened here, proceed to the final objective."
-
-/datum/objective/eldergod
-	var/summoned = FALSE
-	var/killed = FALSE
-	var/list/summon_spots = list()
-
-/datum/objective/eldergod/New()
-	..()
-	var/sanity = 0
-	while(summon_spots.len < SUMMON_POSSIBILITIES && sanity < 100) //what the fuck is a sanity???
-		var/area/summon_area = pick(GLOB.sortedAreas - summon_spots)
-		if(summon_area && is_station_level(summon_area.z) && (summon_area.area_flags & VALID_TERRITORY))
-			summon_spots += summon_area
-		sanity++
-	update_explanation_text()
-
-/datum/objective/eldergod/update_explanation_text()
-	explanation_text = "Summon Nar'Sie by invoking the rune 'Summon Nar'Sie'. <b>The summoning can only be accomplished in [english_list(summon_spots)] - where the veil is weak enough for the ritual to begin.</b>"
-
-/datum/objective/eldergod/check_completion()
-	if(killed)
-		return CULT_NARSIE_KILLED // You failed so hard that even the code went backwards.
-	return summoned || completed
 
 /datum/team/cult/proc/check_cult_victory()
 	for(var/datum/objective/O in objectives)
@@ -286,6 +226,6 @@
 			return FALSE
 	else
 		return FALSE
-	if(HAS_TRAIT(M, TRAIT_MINDSHIELD) || issilicon(M) || isbot(M) || isdrone(M) || !M.client)
+	if((HAS_TRAIT(M, TRAIT_MINDSHIELD) || issilicon(M) || isbot(M) || isdrone(M) || !M.client) && !istype(specific_cult, /datum/team/cult/clockcult))
 		return FALSE //can't convert machines, shielded, or braindead
 	return TRUE

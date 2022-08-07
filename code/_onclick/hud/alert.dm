@@ -450,7 +450,7 @@ or shoot a gun to move around via Newton's 3rd Law of Motion."
 	var/datum/team/cult/bloodcult/cult_team = antag.cult_team
 	if(!antag)
 		return
-	var/datum/objective/sacrifice/sac_objective = locate() in antag.cult_team.objectives
+	var/datum/objective/sacrifice/bloodcult/sac_objective = locate() in antag.cult_team.objectives
 
 	if(cult_team.blood_target)
 		if(!get_turf(cult_team.blood_target))
@@ -471,7 +471,7 @@ or shoot a gun to move around via Newton's 3rd Law of Motion."
 			desc = "Nar'Sie demands that [sac_objective.target] be sacrificed before the summoning ritual can begin."
 			add_overlay(sac_objective.sac_image)
 		else
-			var/datum/objective/eldergod/summon_objective = locate() in antag.cult_team.objectives
+			var/datum/objective/geometer/summon_objective = locate() in antag.cult_team.objectives
 			if(!summon_objective)
 				return
 			desc = "The sacrifice is complete, summon Nar'Sie! The summoning can only take place in [english_list(summon_objective.summon_spots)]!"

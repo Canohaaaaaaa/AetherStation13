@@ -9,7 +9,6 @@
 	greet_alert = 'sound/ambience/antag/bloodcult.ogg'
 	standard_gear = list(/obj/item/melee/cultblade/dagger)
 	additional_gear = list(/obj/item/stack/sheet/runed_metal/ten)
-	cult_team = /datum/team/cult/bloodcult
 	var/datum/action/innate/cult/blood_magic/magic = new
 
 /datum/antagonist/cult/bloodcult/on_gain()
@@ -138,11 +137,20 @@
 /datum/team/cult/bloodcult
 	name = "Cult"
 	rise_eye_color = "f00"
-
+	cult_team_type = /datum/team/cult/bloodcult
 	var/blood_target
 	var/image/blood_target_image
 	var/blood_target_reset_timer
 
+/datum/team/cult/bloodcult/setup_objectives()
+	var/datum/objective/sacrifice/bloodcult/sacrifice_objective = new
+	sacrifice_objective.team = src
+	sacrifice_objective.find_target()
+	objectives += sacrifice_objective
+
+	var/datum/objective/geometer/summon_objective = new
+	summon_objective.team = src
+	objectives += summon_objective
 
 /datum/team/cult/bloodcult/roundend_report()
 	var/list/parts = list()
@@ -170,3 +178,62 @@
 		parts += printplayerlist(members)
 
 	return "<div class='panel redborder'>[parts.Join("<br>")]</div>"
+
+/datum/objective/geometer
+	var/summoned = FALSE
+	var/killed = FALSE
+	var/list/summon_spots = list()
+
+/datum/objective/geometer/New()
+	..()
+	var/sanity = 0
+	while(summon_spots.len < SUMMON_POSSIBILITIES && sanity < 100) //what the fuck is a sanity???
+		var/area/summon_area = pick(GLOB.sortedAreas - summon_spots)
+		if(summon_area && is_station_level(summon_area.z) && (summon_area.area_flags & VALID_TERRITORY))
+			summon_spots += summon_area
+		sanity++
+	update_explanation_text()
+
+/datum/objective/geometer/update_explanation_text()
+	explanation_text = "Summon Nar'Sie by invoking the rune 'Summon Nar'Sie'. <b>The summoning can only be accomplished in [english_list(summon_spots)] - where the veil is weak enough for the ritual to begin.</b>"
+
+/datum/objective/geometer/check_completion()
+	if(killed)
+		return CULT_NARSIE_KILLED // You failed so hard that even the code went backwards.
+	return summoned || completed
+
+/datum/objective/sacrifice/bloodcult
+
+/datum/objective/sacrifice/bloodcult/check_completion()
+	return sacced || completed
+
+/datum/objective/sacrifice/bloodcult/update_explanation_text() //TODO.. more flavour
+	if(target)
+		explanation_text = "Sacrifice [target], the [target.assigned_role.title] via invoking an Offer rune with [target.p_them()] on it and three acolytes around it."
+	else
+		explanation_text = "The veil has already been weakened here, proceed to the final objective."
+
+/datum/objective/sacrifice/bloodcult/find_target(dupe_search_range)
+	if(!istype(team, /datum/team/cult))
+		return
+	var/datum/team/cult/cult = team
+	var/list/target_candidates = list()
+	for(var/mob/living/carbon/human/player in GLOB.player_list)
+		if(player.mind && !player.mind.has_antag_datum(/datum/antagonist/cult) && !is_convertable_to_cult(player) && player.stat != DEAD)
+			target_candidates += player.mind
+	if(target_candidates.len == 0)
+		message_admins("Cult Sacrifice: Could not find unconvertible target, checking for convertible target.")
+		for(var/mob/living/carbon/human/player in GLOB.player_list)
+			if(player.mind && !player.mind.has_antag_datum(/datum/antagonist/cult) && player.stat != DEAD)
+				target_candidates += player.mind
+	list_clear_nulls(target_candidates)
+	if(LAZYLEN(target_candidates))
+		target = pick(target_candidates)
+		update_explanation_text()
+	else
+		message_admins("Cult Sacrifice: Could not find unconvertible or convertible target. WELP!")
+	cult.make_image(src)
+	for(var/datum/mind/mind in cult.members)
+		if(mind.current)
+			mind.current.clear_alert("bloodsense")
+			mind.current.throw_alert("bloodsense", /atom/movable/screen/alert/bloodsense)

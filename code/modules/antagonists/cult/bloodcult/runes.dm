@@ -300,7 +300,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		return FALSE
 	if(sacrificial.mind)
 		GLOB.sacrificed += sacrificial.mind
-		for(var/datum/objective/sacrifice/sac_objective in C.cult_team.objectives)
+		for(var/datum/objective/sacrifice/bloodcult/sac_objective in C.cult_team.objectives)
 			if(sac_objective.target == sacrificial.mind)
 				sac_objective.sacced = TRUE
 				sac_objective.update_explanation_text()
@@ -507,7 +507,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		return
 	var/mob/living/user = invokers[1]
 	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
-	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
+	var/datum/objective/geometer/summon_objective = locate() in user_antag.cult_team.objectives
 	var/area/place = get_area(src)
 	if(!(place in summon_objective.summon_spots))
 		to_chat(user, span_bloodcultlarge("The Geometer can only be summoned where the veil is weak - in [english_list(summon_objective.summon_spots)]!"))
@@ -905,7 +905,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/area/place = get_area(src)
 	var/mob/living/user = invokers[1]
 	var/datum/antagonist/cult/bloodcult/user_antag = user.mind.has_antag_datum(/datum/antagonist/cult/bloodcult,TRUE)
-	var/datum/objective/eldergod/summon_objective = locate() in user_antag.cult_team.objectives
+	var/datum/objective/geometer/summon_objective = locate() in user_antag.cult_team.objectives
 	if(summon_objective.summon_spots.len <= 1)
 		to_chat(user, span_bloodcultlarge("Only one ritual site remains - it must be reserved for the final summoning!"))
 		return
