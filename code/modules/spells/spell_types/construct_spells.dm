@@ -336,6 +336,6 @@
 	playsound(T, 'sound/weapons/resonator_blast.ogg', 100, FALSE)
 	new /obj/effect/temp_visual/bloodcult/sac(T)
 	for(var/obj/O in range(src,1))
-		if(O.density && !istype(O, /obj/structure/destructible/cult))
+		if(O.density && !istype(O, /obj/structure/destructible/bloodcult))
 			O.take_damage(90, BRUTE, MELEE, 0)
 			new /obj/effect/temp_visual/bloodcult/turf/floor(get_turf(O))

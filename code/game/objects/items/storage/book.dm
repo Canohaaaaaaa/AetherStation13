@@ -210,7 +210,7 @@ GLOBAL_LIST_INIT(bibleitemstates, list("bible", "koran", "scrapbook", "burning",
 			B.name = name
 			B.icon_state = icon_state
 			B.inhand_icon_state = inhand_icon_state
-	if(istype(A, /obj/item/cult_bastard) && !IS_CULTIST(user))
+	if(istype(A, /obj/item/cult_bastard) && !IS_CULTIST_BLOOD(user))
 		var/obj/item/cult_bastard/sword = A
 		to_chat(user, span_notice("You begin to exorcise [sword]."))
 		playsound(src,'sound/hallucinations/veryfar_noise.ogg',40,TRUE)
@@ -231,7 +231,7 @@ GLOBAL_LIST_INIT(bibleitemstates, list("bible", "koran", "scrapbook", "burning",
 			new /obj/item/nullrod/claymore(get_turf(sword))
 			user.visible_message(span_notice("[user] purifies [sword]!"))
 			qdel(sword)
-	else if(istype(A, /obj/item/soulstone) && !IS_CULTIST(user))
+	else if(istype(A, /obj/item/soulstone) && !IS_CULTIST_BLOOD(user))
 		var/obj/item/soulstone/SS = A
 		if(SS.theme == THEME_HOLY)
 			return

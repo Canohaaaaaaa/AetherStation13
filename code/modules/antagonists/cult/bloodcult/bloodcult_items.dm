@@ -38,7 +38,7 @@
 	if(owner.get_active_held_item() != src)
 		block_message = "[owner] parries [attack_text] with [src] in their offhand"
 
-	if(IS_CULTIST(owner) && prob(final_block_chance) && attack_type != PROJECTILE_ATTACK)
+	if(IS_CULTIST_BLOOD(owner) && prob(final_block_chance) && attack_type != PROJECTILE_ATTACK)
 		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 		playsound(src, 'sound/weapons/parry.ogg', 100, TRUE)
 		owner.visible_message(span_danger("[block_message]"))
@@ -73,7 +73,7 @@
 	AddComponent(/datum/component/butchering, 40, 100)
 
 /obj/item/melee/cultblade/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	if(IS_CULTIST(owner) && prob(final_block_chance))
+	if(IS_CULTIST_BLOOD(owner) && prob(final_block_chance))
 		new /obj/effect/temp_visual/bloodcult/sparks(get_turf(owner))
 		playsound(src, 'sound/weapons/parry.ogg', 100, TRUE)
 		owner.visible_message(span_danger("[owner] parries [attack_text] with [src]!"))
@@ -82,7 +82,7 @@
 		return FALSE
 
 /obj/item/melee/cultblade/attack(mob/living/target, mob/living/carbon/human/user)
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		user.Paralyze(100)
 		user.dropItemToGround(src, TRUE)
 		user.visible_message(span_warning("A powerful force shoves [user] away from [target]!"), \
@@ -108,7 +108,7 @@
 
 /obj/item/melee/cultblade/pickup(mob/living/user)
 	..()
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 
 /obj/item/cult_bastard
@@ -173,7 +173,7 @@
 
 /obj/item/cult_bastard/pickup(mob/living/user)
 	. = ..()
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		force = 5
 		return
@@ -238,7 +238,7 @@
 	phaseout = /obj/effect/temp_visual/dir_setting/cult/phase/out
 
 /datum/action/innate/dash/cult/IsAvailable()
-	if(IS_CULTIST(owner) && current_charges)
+	if(IS_CULTIST_BLOOD(owner) && current_charges)
 		return TRUE
 	else
 		return FALSE
@@ -260,7 +260,7 @@
 	holder = user
 
 /datum/action/innate/cult/spin2win/IsAvailable()
-	if(IS_CULTIST(holder) && cooldown <= world.time)
+	if(IS_CULTIST_BLOOD(holder) && cooldown <= world.time)
 		return TRUE
 	else
 		return FALSE
@@ -294,7 +294,7 @@
 /obj/item/restraints/legcuffs/bola/cult/attack_hand(mob/living/carbon/user, list/modifiers)
 	. = ..()
 
-	if(IS_CULTIST(user) || !iscarbon(user))
+	if(IS_CULTIST_BLOOD(user) || !iscarbon(user))
 		return
 	var/mob/living/carbon/carbon_user = user
 	if(user.num_legs < 2 || carbon_user.legcuffed) //if they can't be ensnared, stun for the same time as it takes to breakout of bola
@@ -309,7 +309,7 @@
 
 /obj/item/restraints/legcuffs/bola/cult/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	var/mob/hit_mob = hit_atom
-	if (istype(hit_mob) && IS_CULTIST(hit_mob))
+	if (istype(hit_mob) && IS_CULTIST_BLOOD(hit_mob))
 		return
 	. = ..()
 
@@ -447,7 +447,7 @@
 
 /obj/item/clothing/suit/hooded/cultrobes/cult_shield/equipped(mob/living/user, slot)
 	..()
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		to_chat(user, span_warning("An overwhelming sense of nausea overpowers you!"))
 		user.dropItemToGround(src, TRUE)
@@ -469,7 +469,7 @@
 
 /obj/item/clothing/suit/hooded/cultrobes/berserker/equipped(mob/living/user, slot)
 	..()
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"I wouldn't advise that.\""))
 		to_chat(user, span_warning("An overwhelming sense of nausea overpowers you!"))
 		user.dropItemToGround(src, TRUE)
@@ -485,7 +485,7 @@
 
 /obj/item/clothing/glasses/hud/health/night/cultblind/equipped(mob/living/user, slot)
 	..()
-	if(!IS_CULTIST(user) && slot == ITEM_SLOT_EYES)
+	if(!IS_CULTIST_BLOOD(user) && slot == ITEM_SLOT_EYES)
 		to_chat(user, span_bloodcultlarge("\"You want to be blind, do you?\""))
 		user.dropItemToGround(src, TRUE)
 		user.Dizzy(30)
@@ -512,7 +512,7 @@
 	var/static/totalcurses = 0
 
 /obj/item/shuttle_curse/attack_self(mob/living/user)
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		user.dropItemToGround(src, TRUE)
 		user.Paralyze(100)
 		to_chat(user, span_warning("A powerful force shoves you away from [src]!"))
@@ -591,7 +591,7 @@
 	if(!uses || !iscarbon(user))
 		to_chat(user, span_warning("\The [src] is dull and unmoving in your hands."))
 		return
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		user.dropItemToGround(src, TRUE)
 		step(src, pick(GLOB.alldirs))
 		to_chat(user, span_warning("\The [src] flickers out of your hands, your connection to this dimension is too strong!"))
@@ -635,7 +635,7 @@
 /obj/item/flashlight/flare/culttorch/afterattack(atom/movable/A, mob/user, proximity)
 	if(!proximity)
 		return
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, "That doesn't seem to do anything useful.")
 		return
 
@@ -656,7 +656,7 @@
 			to_chat(user, "<span class='cult italic'>[cultist_to_receive] has died!</span>")
 			log_game("Void torch failed - target died")
 			return
-		if(!IS_CULTIST(cultist_to_receive))
+		if(!IS_CULTIST_BLOOD(cultist_to_receive))
 			to_chat(user, "<span class='cult italic'>[cultist_to_receive] is not a follower of the Geometer!</span>")
 			log_game("Void torch failed - target was deconverted")
 			return
@@ -731,7 +731,7 @@
 	var/turf/T = get_turf(hit_atom)
 	if(isliving(hit_atom))
 		var/mob/living/L = hit_atom
-		if(IS_CULTIST(L))
+		if(IS_CULTIST_BLOOD(L))
 			playsound(src, 'sound/weapons/throwtap.ogg', 50)
 			if(L.put_in_active_hand(src))
 				L.visible_message(span_warning("[L] catches [src] out of the air!"))
@@ -758,7 +758,7 @@
 /obj/item/melee/cultblade/halberd/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(wielded)
 		final_block_chance *= 2
-	if(IS_CULTIST(owner) && prob(final_block_chance))
+	if(IS_CULTIST_BLOOD(owner) && prob(final_block_chance))
 		if(attack_type == PROJECTILE_ATTACK)
 			owner.visible_message(span_danger("[owner] deflects [attack_text] with [src]!"))
 			playsound(get_turf(owner), pick('sound/weapons/bulletflyby.ogg', 'sound/weapons/bulletflyby2.ogg', 'sound/weapons/bulletflyby3.ogg'), 75, TRUE)
@@ -812,7 +812,7 @@
 
 /obj/item/gun/ballistic/rifle/enchanted/arcane_barrage/blood/can_trigger_gun(mob/living/user)
 	. = ..()
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"Did you truly think that you could channel MY blood without my approval? Amusing, but futile.\""))
 		if(iscarbon(user))
 			var/mob/living/carbon/C = user
@@ -843,7 +843,7 @@
 	playsound(T, 'sound/effects/splat.ogg', 50, TRUE)
 	var/mob/mob_target = target
 
-	if(mob_target && IS_CULTIST(mob_target))
+	if(mob_target && IS_CULTIST_BLOOD(mob_target))
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = target
 			if(H.stat != DEAD)
@@ -947,7 +947,7 @@
 				break
 			T.narsie_act(TRUE, TRUE)
 			for(var/mob/living/target in T.contents)
-				if(IS_CULTIST(target))
+				if(IS_CULTIST_BLOOD(target))
 					new /obj/effect/temp_visual/bloodcult/sparks(T)
 					if(ishuman(target))
 						var/mob/living/carbon/human/H = target
@@ -989,7 +989,7 @@
 	var/illusions = 2
 
 /obj/item/shield/mirror/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	if(IS_CULTIST(owner))
+	if(IS_CULTIST_BLOOD(owner))
 		if(istype(hitby, /obj/projectile))
 			var/obj/projectile/P = hitby
 			if(P.damage_type == BRUTE || P.damage_type == BURN)
@@ -1046,7 +1046,7 @@
 	var/datum/thrownthing/D = throwingdatum
 	if(isliving(hit_atom))
 		var/mob/living/L = hit_atom
-		if(IS_CULTIST(L))
+		if(IS_CULTIST_BLOOD(L))
 			playsound(src, 'sound/weapons/throwtap.ogg', 50)
 			if(L.put_in_active_hand(src))
 				L.visible_message(span_warning("[L] catches [src] out of the air!"))
@@ -1057,7 +1057,7 @@
 				L.Paralyze(30)
 				if(D?.thrower)
 					for(var/mob/living/Next in orange(2, T))
-						if(!Next.density || IS_CULTIST(Next))
+						if(!Next.density || IS_CULTIST_BLOOD(Next))
 							continue
 						throw_at(Next, 3, 1, D.thrower)
 						return

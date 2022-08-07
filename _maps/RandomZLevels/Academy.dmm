@@ -123,7 +123,7 @@
 /turf/open/floor/carpet,
 /area/awaymission/academy/headmaster)
 "aJ" = (
-/obj/structure/destructible/cult/tome,
+/obj/structure/destructible/bloodcult/tome,
 /obj/item/dice/d20/fate,
 /turf/open/floor/wood,
 /area/awaymission/academy/headmaster)
@@ -2133,7 +2133,7 @@
 /turf/open/floor/iron,
 /area/awaymission/academy/academyaft)
 "jw" = (
-/obj/structure/destructible/cult/pylon,
+/obj/structure/destructible/bloodcult/pylon,
 /obj/effect/turf_decal/tile/yellow{
 	dir = 1
 	},
@@ -2151,7 +2151,7 @@
 /turf/open/floor/iron,
 /area/awaymission/academy/academyaft)
 "jy" = (
-/obj/structure/destructible/cult/pylon,
+/obj/structure/destructible/bloodcult/pylon,
 /obj/effect/turf_decal/tile/yellow,
 /obj/effect/turf_decal/tile/yellow{
 	dir = 4

@@ -50,7 +50,7 @@ Runes can either be invoked by one's self or with many different cultists. Each 
 
 /obj/effect/rune/examine(mob/user)
 	. = ..()
-	if(IS_CULTIST(user) || user.stat == DEAD) //If they're a cultist or a ghost, tell them the effects
+	if(IS_CULTIST_BLOOD(user) || user.stat == DEAD) //If they're a cultist or a ghost, tell them the effects
 		. += "<b>Name:</b> [cultist_name]\n"+\
 		"<b>Effects:</b> [capitalize(cultist_desc)]\n"+\
 		"<b>Required Acolytes:</b> [req_cultists_text ? "[req_cultists_text]":"[req_cultists]"]"
@@ -58,7 +58,7 @@ Runes can either be invoked by one's self or with many different cultists. Each 
 			. += "<b>Keyword:</b> [keyword]"
 
 /obj/effect/rune/attackby(obj/I, mob/user, params)
-	if(istype(I, /obj/item/melee/cultblade/dagger) && IS_CULTIST(user))
+	if(istype(I, /obj/item/melee/cultblade/dagger) && IS_CULTIST_BLOOD(user))
 		if(log_when_erased)
 			var/confirm = tgui_alert(user, "Erasing this [cultist_name] rune might be against your goal to summon Nar'Sie.", "Begin to erase the [cultist_name] rune?", list("Proceed", "Abort"))
 			if(confirm != "Proceed")
@@ -85,7 +85,7 @@ Runes can either be invoked by one's self or with many different cultists. Each 
 	. = ..()
 	if(.)
 		return
-	if(!IS_CULTIST(user))
+	if(!IS_CULTIST_BLOOD(user))
 		to_chat(user, span_warning("You aren't able to understand the words of [src]."))
 		return
 	var/list/invokers = can_invoke(user)
@@ -100,7 +100,7 @@ Runes can either be invoked by one's self or with many different cultists. Each 
 		if(istype(user, /mob/living/simple_animal/hostile/construct/wraith/angelic) || istype(user, /mob/living/simple_animal/hostile/construct/juggernaut/angelic) || istype(user, /mob/living/simple_animal/hostile/construct/artificer/angelic))
 			to_chat(user, span_warning("You purge the rune!"))
 			qdel(src)
-		else if(construct_invoke || !IS_CULTIST(user)) //if you're not a cult construct we want the normal fail message
+		else if(construct_invoke || !IS_CULTIST_BLOOD(user)) //if you're not a cult construct we want the normal fail message
 			attack_hand(user)
 		else
 			to_chat(user, span_warning("You are unable to invoke the rune!"))
@@ -133,7 +133,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	if(req_cultists > 1 || istype(src, /obj/effect/rune/convert))
 		var/list/things_in_range = range(1, src)
 		for(var/mob/living/L in things_in_range)
-			if(IS_CULTIST(L))
+			if(IS_CULTIST_BLOOD(L))
 				if(L == user)
 					continue
 				if(ishuman(L))
@@ -210,7 +210,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/list/myriad_targets = list()
 	var/turf/T = get_turf(src)
 	for(var/mob/living/M in T)
-		if(!IS_CULTIST(M))
+		if(!IS_CULTIST_BLOOD(M))
 			myriad_targets |= M
 	if(!myriad_targets.len)
 		fail_invoke()
@@ -538,7 +538,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 
 /obj/effect/rune/raise_dead/examine(mob/user)
 	. = ..()
-	if(IS_CULTIST(user) || user.stat == DEAD)
+	if(IS_CULTIST_BLOOD(user) || user.stat == DEAD)
 		. += "<b>Sacrifices unrewarded:</b> [LAZYLEN(GLOB.sacrificed) - sacrifices_used]"
 
 /obj/effect/rune/raise_dead/invoke(list/invokers)
@@ -550,7 +550,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		return
 	rune_in_use = TRUE
 	for(var/mob/living/M in T.contents)
-		if(IS_CULTIST(M) && (M.stat == DEAD || !M.client || M.client.is_afk()))
+		if(IS_CULTIST_BLOOD(M) && (M.stat == DEAD || !M.client || M.client.is_afk()))
 			potential_revive_mobs |= M
 	if(!potential_revive_mobs.len)
 		to_chat(user, "<span class='cult italic'>There are no dead cultists on the rune!</span>")
@@ -614,7 +614,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	..()
 	rune_in_use = FALSE
 	for(var/mob/living/M in range(1,src))
-		if(IS_CULTIST(M) && M.stat == DEAD)
+		if(IS_CULTIST_BLOOD(M) && M.stat == DEAD)
 			M.visible_message(span_warning("[M] twitches."))
 
 //Rite of the Corporeal Shield: When invoked, becomes solid and cannot be passed. Invoke again to undo.
@@ -682,7 +682,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		fail_invoke()
 		log_game("Summon Cultist rune failed - target restrained")
 		return
-	if(!IS_CULTIST(cultist_to_summon))
+	if(!IS_CULTIST_BLOOD(cultist_to_summon))
 		to_chat(user, "<span class='cult italic'>[cultist_to_summon] is not a follower of the Geometer!</span>")
 		fail_invoke()
 		log_game("Summon Cultist rune failed - target was deconverted")
@@ -726,7 +726,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	color = "#FC9B54"
 	set_light(6, 1, color)
 	for(var/mob/living/L in viewers(T))
-		if(!IS_CULTIST(L) && L.blood_volume)
+		if(!IS_CULTIST_BLOOD(L) && L.blood_volume)
 			var/atom/I = L.anti_magic_check(chargecost = 0)
 			if(I)
 				if(isitem(I))
@@ -754,7 +754,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 /obj/effect/rune/blood_boil/proc/do_area_burn(turf/T, multiplier)
 	set_light(6, 1, color)
 	for(var/mob/living/L in viewers(T))
-		if(!IS_CULTIST(L) && L.blood_volume)
+		if(!IS_CULTIST_BLOOD(L) && L.blood_volume)
 			if(L.anti_magic_check(chargecost = 0))
 				continue
 			L.take_overall_damage(tick_damage*multiplier, tick_damage*multiplier)
@@ -918,7 +918,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 	new /obj/effect/temp_visual/dir_setting/curse/grasp_portal/fading(T)
 	var/intensity = 0
 	for(var/mob/living/M in GLOB.player_list)
-		if(IS_CULTIST(M))
+		if(IS_CULTIST_BLOOD(M))
 			intensity++
 	intensity = max(60, 360 - (360*(intensity/GLOB.player_list.len + 0.3)**2)) //significantly lower intensity for "winning" cults
 	var/duration = intensity*10
@@ -934,7 +934,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		if(M.z != zmatch)
 			continue
 		if(ishuman(M))
-			if(!IS_CULTIST(M))
+			if(!IS_CULTIST_BLOOD(M))
 				AH.remove_hud_from(M)
 				addtimer(CALLBACK(GLOBAL_PROC, .proc/hudFix, M), duration)
 			var/image/A = image('icons/mob/cult.dmi',M,"cultist", ABOVE_MOB_LAYER)
@@ -950,7 +950,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/noncult, "mob_apoc", B, NONE)
 			addtimer(CALLBACK(M,/atom/.proc/remove_alt_appearance,"mob_apoc",TRUE), duration)
 			images += B
-		if(!IS_CULTIST(M))
+		if(!IS_CULTIST_BLOOD(M))
 			if(M.client)
 				var/image/C = image('icons/effects/bloodcult_effects.dmi',M,"bloodsparkles", ABOVE_MOB_LAYER)
 				add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/cult, "cult_apoc", C, NONE)

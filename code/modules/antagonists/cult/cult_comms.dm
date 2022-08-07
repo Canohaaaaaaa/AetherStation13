@@ -445,7 +445,7 @@
 	if(target in view(7, get_turf(ranged_ability_user)))
 		var/mob/mob_target = target
 		var/is_cultist = istype(mob_target) && IS_CULTIST(mob_target)
-		if((!(is_cultist || istype(target, /obj/structure/destructible/cult)) || target == caller) && !(attached_action.throwing))
+		if((!(is_cultist || istype(target, /obj/structure/destructible/bloodcult)) || target == caller) && !(attached_action.throwing))
 			return
 		if(!attached_action.throwing)
 			attached_action.throwing = TRUE

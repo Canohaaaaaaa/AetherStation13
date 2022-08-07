@@ -248,8 +248,10 @@
 
 /datum/reagent/water/holywater/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume)
 	. = ..()
-	if(IS_CULTIST(exposed_mob))
+	if(IS_CULTIST_BLOOD(exposed_mob))
 		to_chat(exposed_mob, span_userdanger("A vile holiness begins to spread its shining tendrils through your mind, purging the Geometer of Blood's influence!"))
+	else if(IS_CULTIST_CLOCK(exposed_mob))
+		to_chat(exposed_mob, span_userdanger("A vile holiness begins to spread its shining tendrils through your mind, purging the Clockwork Justicar's influence!"))
 
 /datum/reagent/water/holywater/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
 	if(M.blood_volume)
@@ -261,7 +263,7 @@
 	M.jitteriness = min(M.jitteriness + (2 * delta_time), 10)
 	if(IS_CULTIST(M))
 		for(var/datum/action/innate/cult/blood_magic/BM in M.actions)
-			to_chat(M, span_bloodcultlarge("Your blood rites falter as holy water scours your body!"))
+			to_chat(M, span_bloodcultlarge("Your blood rites falter as holy water scours your body!")) //TODO.. destroy spells from items
 			for(var/datum/action/innate/cult/blood_spell/BS in BM.spells)
 				qdel(BS)
 	if(data["misc"] >= (25 SECONDS)) // 10 units
@@ -270,7 +272,7 @@
 		M.stuttering = min(M.stuttering + (2 * delta_time), 10)
 		M.Dizzy(5)
 		if(IS_CULTIST(M) && DT_PROB(10, delta_time))
-			M.say(pick("Av'te Nar'Sie","Pa'lid Mors","INO INO ORA ANA","SAT ANA!","Daim'niodeis Arc'iai Le'eones","R'ge Na'sie","Diabo us Vo'iscum","Eld' Mon Nobis"), forced = "holy water")
+			M.say(pick("Av'te Nar'Sie","Pa'lid Mors","INO INO ORA ANA","SAT ANA!","Daim'niodeis Arc'iai Le'eones","R'ge Na'sie","Diabo us Vo'iscum","Eld' Mon Nobis", "Ve", "Vic'tori'am Ratvar"), forced = "holy water")
 			if(prob(10))
 				M.visible_message(span_danger("[M] starts having a seizure!"), span_userdanger("You have a seizure!"))
 				M.Unconscious(12 SECONDS)
@@ -339,7 +341,7 @@
 	penetrates_skin = TOUCH|VAPOR
 
 /datum/reagent/fuel/unholywater/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
-	if(IS_CULTIST(M))
+	if(IS_CULTIST_BLOOD(M))
 		M.drowsyness = max(M.drowsyness - (5* REM * delta_time), 0)
 		M.AdjustAllImmobility(-40 *REM* REM * delta_time)
 		M.adjustStaminaLoss(-10 * REM * delta_time, 0)

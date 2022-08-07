@@ -34,7 +34,7 @@ GLOBAL_LIST_INIT(voice_of_god_commands, init_voice_of_god_commands())
 	var/log_message = uppertext(message)
 	var/is_cultie = IS_CULTIST(user)
 	if(LAZYLEN(span_list) && is_cultie)
-		span_list = list("narsiesmall")
+		span_list = list("[IS_CULTIST_BLOOD(user) ? "narsiesmall" : "ratvarsmall"]")
 
 	if(!user.say(message, spans = span_list, sanitize = FALSE))
 		return

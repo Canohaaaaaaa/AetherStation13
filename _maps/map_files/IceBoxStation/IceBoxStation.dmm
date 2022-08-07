@@ -39376,7 +39376,7 @@
 /turf/open/floor/iron,
 /area/ai_monitored/command/storage/eva)
 "nJn" = (
-/obj/structure/destructible/cult/tome,
+/obj/structure/destructible/bloodcult/tome,
 /obj/item/clothing/under/suit/red,
 /obj/item/book/codex_gigas,
 /turf/open/floor/engine/cult,

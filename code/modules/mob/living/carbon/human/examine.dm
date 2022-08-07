@@ -82,8 +82,10 @@
 		if(glasses  && !(glasses.item_flags & EXAMINE_SKIP))
 			. += "[t_He] [t_has] [glasses.get_examine_string(user)] covering [t_his] eyes."
 		else if(eye_color == BLOODCULT_EYE)
-			if(IS_CULTIST(src) && HAS_TRAIT(src, TRAIT_CULT_EYES))
+			if(IS_CULTIST_BLOOD(src) && HAS_TRAIT(src, TRAIT_CULT_EYES))
 				. += "<span class='warning'><B>[t_His] eyes are glowing an unnatural red!</B></span>"
+			else if(IS_CULTIST_CLOCK(src) && HAS_TRAIT(src, TRAIT_CULT_EYES))
+				. += "<span class='warning'><B>[t_His] eyes are glowing an unnatural orange!</B></span>" //TODO.. make this text orange also spans
 			else if(HAS_TRAIT(src, TRAIT_BLOODSHOT_EYES))
 				. += "<span class='warning'><B>[t_His] eyes are bloodshot!</B></span>"
 

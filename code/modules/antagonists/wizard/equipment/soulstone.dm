@@ -87,10 +87,10 @@
 		return
 	if(!ishuman(M))//If target is not a human.
 		return ..()
-	if(IS_CULTIST(M) && IS_CULTIST(user))
+	if(IS_CULTIST_BLOOD(M) && IS_CULTIST_BLOOD(user))
 		to_chat(user, span_bloodcultlarge("\"Come now, do not capture your bretheren's soul.\""))
 		return
-	if(theme == THEME_HOLY && IS_CULTIST(user))
+	if(theme == THEME_HOLY && IS_CULTIST_BLOOD(user))
 		hot_potato(user)
 		return
 	log_combat(user, M, "captured [M.name]'s soul", src)
@@ -105,7 +105,7 @@
 		user.Unconscious(100)
 		to_chat(user, span_userdanger("Your body is wracked with debilitating pain!"))
 		return
-	if(theme == THEME_HOLY && IS_CULTIST(user))
+	if(theme == THEME_HOLY && IS_CULTIST_BLOOD(user))
 		hot_potato(user)
 		return
 	release_shades(user)
@@ -128,7 +128,7 @@
 				icon_state = "soulstone"
 		name = initial(name)
 		if(!silent)
-			if(IS_CULTIST(user))
+			if(IS_CULTIST_BLOOD(user))
 				to_chat(A, "<b>You have been released from your prison, but you are still bound to the cult's will. Help them succeed in their goals at all costs.</b>")
 			else if(role_check(user))
 				to_chat(A, "<b>You have been released from your prison, but you are still bound to [user.real_name]'s will. Help [user.p_them()] succeed in [user.p_their()] goals at all costs.</b>")
@@ -140,7 +140,7 @@
 	if(!occupant || !istype(target_toolbox) || target_toolbox.has_soul)
 		return ..()
 
-	if(theme == THEME_HOLY && IS_CULTIST(user))
+	if(theme == THEME_HOLY && IS_CULTIST_BLOOD(user))
 		hot_potato(user)
 		return
 	if(!role_check(user))
@@ -182,11 +182,11 @@
 /obj/structure/constructshell/attackby(obj/item/O, mob/user, params)
 	if(istype(O, /obj/item/soulstone))
 		var/obj/item/soulstone/SS = O
-		if(!IS_CULTIST(user) && !IS_WIZARD(user) && !SS.theme == THEME_HOLY)
+		if(!IS_CULTIST_BLOOD(user) && !IS_WIZARD(user) && !SS.theme == THEME_HOLY)
 			to_chat(user, span_danger("An overwhelming feeling of dread comes over you as you attempt to place [SS] into the shell. It would be wise to be rid of this quickly."))
 			user.Dizzy(30)
 			return
-		if(SS.theme == THEME_HOLY && IS_CULTIST(user))
+		if(SS.theme == THEME_HOLY && IS_CULTIST_BLOOD(user))
 			SS.hot_potato(user)
 			return
 		SS.transfer_soul("CONSTRUCT",src,user)
@@ -277,7 +277,7 @@
 /proc/make_new_construct_from_class(construct_class, theme, mob/target, mob/creator, cultoverride, loc_override)
 	switch(construct_class)
 		if(CONSTRUCT_JUGGERNAUT)
-			if(IS_CULTIST(creator))
+			if(IS_CULTIST_BLOOD(creator))
 				makeNewConstruct(/mob/living/simple_animal/hostile/construct/juggernaut, target, creator, cultoverride, loc_override) // ignore themes, the actual giving of cult info is in the makeNewConstruct proc
 			switch(theme)
 				if(THEME_WIZARD)
@@ -287,7 +287,7 @@
 				if(THEME_CULT)
 					makeNewConstruct(/mob/living/simple_animal/hostile/construct/juggernaut/noncult, target, creator, cultoverride, loc_override)
 		if(CONSTRUCT_WRAITH)
-			if(IS_CULTIST(creator))
+			if(IS_CULTIST_BLOOD(creator))
 				makeNewConstruct(/mob/living/simple_animal/hostile/construct/wraith, target, creator, cultoverride, loc_override) // ignore themes, the actual giving of cult info is in the makeNewConstruct proc
 			switch(theme)
 				if(THEME_WIZARD)
@@ -297,7 +297,7 @@
 				if(THEME_CULT)
 					makeNewConstruct(/mob/living/simple_animal/hostile/construct/wraith/noncult, target, creator, cultoverride, loc_override)
 		if(CONSTRUCT_ARTIFICER)
-			if(IS_CULTIST(creator))
+			if(IS_CULTIST_BLOOD(creator))
 				makeNewConstruct(/mob/living/simple_animal/hostile/construct/artificer, target, creator, cultoverride, loc_override) // ignore themes, the actual giving of cult info is in the makeNewConstruct proc
 			switch(theme)
 				if(THEME_WIZARD)
@@ -322,9 +322,9 @@
 		SM.Grant(newstruct)
 	newstruct.key = target.key
 	var/atom/movable/screen/alert/bloodsense/BS
-	if(newstruct.mind && ((stoner && IS_CULTIST(stoner)) || cultoverride) && SSticker?.mode)
+	if(newstruct.mind && ((stoner && IS_CULTIST_BLOOD(stoner)) || cultoverride) && SSticker?.mode)
 		newstruct.mind.add_antag_datum(/datum/antagonist/cult/bloodcult)
-	if(IS_CULTIST(stoner) || cultoverride)
+	if(IS_CULTIST_BLOOD(stoner) || cultoverride)
 		to_chat(newstruct, "<b>You are still bound to serve the cult[stoner ? " and [stoner]":""], follow [stoner ? stoner.p_their() : "their"] orders and help [stoner ? stoner.p_them() : "them"] complete [stoner ? stoner.p_their() : "their"] goals at all costs.</b>")
 	else if(stoner)
 		to_chat(newstruct, "<b>You are still bound to serve your creator, [stoner], follow [stoner.p_their()] orders and help [stoner.p_them()] complete [stoner.p_their()] goals at all costs.</b>")
@@ -354,7 +354,7 @@
 	grant_all_languages(FALSE, FALSE, TRUE) //Grants omnitongue
 	if(user)
 		S.faction |= "[REF(user)]" //Add the master as a faction, allowing inter-mob cooperation
-	if(user && IS_CULTIST(user))
+	if(user && IS_CULTIST_BLOOD(user))
 		S.mind.add_antag_datum(/datum/antagonist/cult/bloodcult)
 	S.cancel_camera()
 	name = "soulstone: Shade of [T.real_name]"
@@ -366,7 +366,7 @@
 		if(THEME_CULT)
 			icon_state = "soulstone2"
 	if(user)
-		if(IS_CULTIST(user))
+		if(IS_CULTIST_BLOOD(user))
 			to_chat(S, "Your soul has been captured! You are now bound to the cult's will. Help them succeed in their goals at all costs.")
 		else if(role_check(user))
 			to_chat(S, "Your soul has been captured! You are now bound to [user.real_name]'s will. Help [user.p_them()] succeed in [user.p_their()] goals at all costs.")

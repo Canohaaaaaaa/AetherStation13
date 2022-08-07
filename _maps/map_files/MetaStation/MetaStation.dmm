@@ -8027,7 +8027,7 @@
 /turf/open/floor/iron,
 /area/hallway/primary/port)
 "bqp" = (
-/obj/structure/destructible/cult/tome,
+/obj/structure/destructible/bloodcult/tome,
 /obj/machinery/newscaster/directional/north,
 /obj/item/clothing/under/suit/red,
 /obj/effect/decal/cleanable/cobweb,

@@ -1,4 +1,4 @@
-/obj/structure/destructible/cult
+/obj/structure/destructible/bloodcult
 	density = TRUE
 	anchored = TRUE
 	icon = 'icons/obj/cult.dmi'
@@ -9,7 +9,7 @@
 	///if you want to add a special, non-default part of the description that only cultists and observers can see, store it in this variable
 	var/cultist_examine_message
 
-/obj/structure/destructible/cult/proc/conceal() //for spells that hide cult presence
+/obj/structure/destructible/bloodcult/proc/conceal() //for spells that hide cult presence
 	set_density(FALSE)
 	visible_message(span_danger("[src] fades away."))
 	invisibility = INVISIBILITY_OBSERVER
@@ -19,7 +19,7 @@
 	update_light()
 	STOP_PROCESSING(SSfastprocess, src)
 
-/obj/structure/destructible/cult/proc/reveal() //for spells that reveal cult presence
+/obj/structure/destructible/bloodcult/proc/reveal() //for spells that reveal cult presence
 	set_density(initial(density))
 	invisibility = 0
 	visible_message(span_danger("[src] suddenly appears!"))
@@ -30,7 +30,7 @@
 	START_PROCESSING(SSfastprocess, src)
 
 
-/obj/structure/destructible/cult/examine(mob/user)
+/obj/structure/destructible/bloodcult/examine(mob/user)
 	. = ..()
 	. += span_notice("\The [src] is [anchored ? "":"not "]secured to the floor.")
 	if(IS_CULTIST(user) || isobserver(user))
@@ -39,14 +39,14 @@
 		if(cooldowntime > world.time)
 			. += "<span class='cult italic'>The magic in [src] is too weak, [p_they()] will be ready to use again in [DisplayTimeText(cooldowntime - world.time)].</span>"
 
-/obj/structure/destructible/cult/examine_status(mob/user)
+/obj/structure/destructible/bloodcult/examine_status(mob/user)
 	if(IS_CULTIST(user) || isobserver(user))
 		var/t_It = p_they(TRUE)
 		var/t_is = p_are()
 		return span_bloodcult("[t_It] [t_is] at <b>[round(obj_integrity * 100 / max_integrity)]%</b> stability.")
 	return ..()
 
-/obj/structure/destructible/cult/attack_animal(mob/living/simple_animal/user, list/modifiers)
+/obj/structure/destructible/bloodcult/attack_animal(mob/living/simple_animal/user, list/modifiers)
 	if(istype(user, /mob/living/simple_animal/hostile/construct/artificer))
 		if(obj_integrity < max_integrity)
 			user.changeNext_move(CLICK_CD_MELEE)
@@ -59,38 +59,38 @@
 	else
 		..()
 
-/obj/structure/destructible/cult/set_anchored(anchorvalue)
+/obj/structure/destructible/bloodcult/set_anchored(anchorvalue)
 	. = ..()
 	if(isnull(.))
 		return
 	update_appearance()
 
-/obj/structure/destructible/cult/update_icon_state()
+/obj/structure/destructible/bloodcult/update_icon_state()
 	icon_state = "[initial(icon_state)][anchored ? null : "_off"]"
 	return ..()
 
-/obj/structure/destructible/cult/attackby(obj/I, mob/user, params)
+/obj/structure/destructible/bloodcult/attackby(obj/I, mob/user, params)
 	if(istype(I, /obj/item/melee/cultblade/dagger) && IS_CULTIST(user))
 		set_anchored(!anchored)
 		to_chat(user, span_notice("You [anchored ? "":"un"]secure \the [src] [anchored ? "to":"from"] the floor."))
 	else
 		return ..()
 
-/obj/structure/destructible/cult/proc/check_menu(mob/user)
+/obj/structure/destructible/bloodcult/proc/check_menu(mob/user)
 	if(!istype(user))
 		return FALSE
 	if(user.incapacitated() || !user.Adjacent(src))
 		return FALSE
 	return TRUE
 
-/obj/structure/destructible/cult/talisman
+/obj/structure/destructible/bloodcult/talisman
 	name = "altar"
 	desc = "A bloodstained altar dedicated to Nar'Sie."
 	cultist_examine_message = "A blood cultist can use it to create eldritch whetstones, construct shells, and flasks of unholy water."
 	icon_state = "talismanaltar"
 	break_message = "<span class='warning'>The altar shatters, leaving only the wailing of the damned!</span>"
 
-/obj/structure/destructible/cult/talisman/attack_hand(mob/living/user, list/modifiers)
+/obj/structure/destructible/bloodcult/talisman/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
 	if(.)
 		return
@@ -125,7 +125,7 @@
 			new N(get_turf(src))
 			to_chat(user, span_bloodcultitalic("You kneel before the altar and your faith is rewarded with the [choice]!"))
 
-/obj/structure/destructible/cult/forge
+/obj/structure/destructible/bloodcult/forge
 	name = "daemon forge"
 	desc = "A forge used in crafting the unholy weapons used by the armies of Nar'Sie."
 	cultist_examine_message = "A blood cultist can use it to create Nar'Sien hardened armor, flagellant's robes, and eldritch longswords."
@@ -134,7 +134,7 @@
 	light_color = LIGHT_COLOR_LAVA
 	break_message = "<span class='warning'>The forge breaks apart into shards with a howling scream!</span>"
 
-/obj/structure/destructible/cult/forge/attack_hand(mob/living/user, list/modifiers)
+/obj/structure/destructible/bloodcult/forge/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
 	if(.)
 		return
@@ -171,7 +171,7 @@
 
 
 
-/obj/structure/destructible/cult/pylon
+/obj/structure/destructible/bloodcult/pylon
 	name = "pylon"
 	desc = "A floating crystal that slowly heals those faithful to Nar'Sie."
 	icon_state = "pylon"
@@ -184,15 +184,15 @@
 	var/corrupt_delay = 50
 	var/last_corrupt = 0
 
-/obj/structure/destructible/cult/pylon/Initialize()
+/obj/structure/destructible/bloodcult/pylon/Initialize()
 	. = ..()
 	START_PROCESSING(SSfastprocess, src)
 
-/obj/structure/destructible/cult/pylon/Destroy()
+/obj/structure/destructible/bloodcult/pylon/Destroy()
 	STOP_PROCESSING(SSfastprocess, src)
 	return ..()
 
-/obj/structure/destructible/cult/pylon/process()
+/obj/structure/destructible/bloodcult/pylon/process()
 	if(!anchored)
 		return
 	if(last_heal <= world.time)
@@ -246,7 +246,7 @@
 			// convertable turfs?
 			last_corrupt = world.time + corrupt_delay*2
 
-/obj/structure/destructible/cult/tome
+/obj/structure/destructible/bloodcult/tome
 	name = "archives"
 	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."
 	cultist_examine_message = "A blood cultist can use it to create zealot's blindfolds, shuttle curse orbs, and veil walker equipment."
@@ -255,7 +255,7 @@
 	light_color = LIGHT_COLOR_FIRE
 	break_message = "<span class='warning'>The books and tomes of the archives burn into ash as the desk shatters!</span>"
 
-/obj/structure/destructible/cult/tome/attack_hand(mob/living/user, list/modifiers)
+/obj/structure/destructible/bloodcult/tome/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
 	if(.)
 		return

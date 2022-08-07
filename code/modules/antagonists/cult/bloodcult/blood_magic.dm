@@ -116,7 +116,7 @@
 	..()
 
 /datum/action/innate/cult/blood_spell/IsAvailable()
-	if(!IS_CULTIST(owner) || owner.incapacitated()  || !charges)
+	if(!IS_CULTIST_BLOOD(owner) || owner.incapacitated()  || !charges)
 		return FALSE
 	return ..()
 
@@ -252,7 +252,7 @@
 /obj/effect/proc_holder/horror/InterceptClickOn(mob/living/caller, params, atom/target)
 	if(..())
 		return
-	if(ranged_ability_user.incapacitated() || !IS_CULTIST(caller))
+	if(ranged_ability_user.incapacitated() || !IS_CULTIST_BLOOD(caller))
 		remove_ranged_ability()
 		return
 	var/turf/T = get_turf(ranged_ability_user)
@@ -260,7 +260,7 @@
 		return FALSE
 	if(target in view(7, get_turf(ranged_ability_user)))
 		var/mob/living/carbon/human/human_target = target
-		if(!istype(human_target) || IS_CULTIST(human_target))
+		if(!istype(human_target) || IS_CULTIST_BLOOD(human_target))
 			return
 		var/mob/living/carbon/human/H = target
 		H.hallucination = max(H.hallucination, 120)
@@ -294,13 +294,13 @@
 		owner.whisper(invocation, language = /datum/language/common)
 		for(var/obj/effect/rune/R in range(5,owner))
 			R.conceal()
-		for(var/obj/structure/destructible/cult/S in range(5,owner))
+		for(var/obj/structure/destructible/bloodcult/S in range(5,owner))
 			S.conceal()
 		for(var/turf/open/floor/engine/cult/T  in range(5,owner))
 			if(!T.realappearance)
 				continue
 			T.realappearance.alpha = 0
-		for(var/obj/machinery/door/airlock/cult/AL in range(5, owner))
+		for(var/obj/machinery/door/airlock/bloodcult/AL in range(5, owner))
 			AL.conceal()
 		revealing = TRUE
 		name = "Reveal Runes"
@@ -313,13 +313,13 @@
 		SEND_SOUND(owner, sound('sound/magic/enter_blood.ogg',0,1,25))
 		for(var/obj/effect/rune/R in range(7,owner)) //More range in case you weren't standing in exactly the same spot
 			R.reveal()
-		for(var/obj/structure/destructible/cult/S in range(6,owner))
+		for(var/obj/structure/destructible/bloodcult/S in range(6,owner))
 			S.reveal()
 		for(var/turf/open/floor/engine/cult/T  in range(6,owner))
 			if(!T.realappearance)
 				continue
 			T.realappearance.alpha = initial(T.realappearance.alpha)
-		for(var/obj/machinery/door/airlock/cult/AL in range(6, owner))
+		for(var/obj/machinery/door/airlock/bloodcult/AL in range(6, owner))
 			AL.reveal()
 		revealing = FALSE
 		name = "Conceal Runes"
@@ -383,7 +383,7 @@
 	afterattack(user, user, TRUE)
 
 /obj/item/melee/blood_magic/attack(mob/living/M, mob/living/carbon/user)
-	if(!iscarbon(user) || !IS_CULTIST(user))
+	if(!iscarbon(user) || !IS_CULTIST_BLOOD(user))
 		uses = 0
 		qdel(src)
 		return
@@ -418,9 +418,9 @@
 	if(!isliving(target) || !proximity)
 		return
 	var/mob/living/L = target
-	if(IS_CULTIST(L))
+	if(IS_CULTIST_BLOOD(L))
 		return
-	if(IS_CULTIST(user))
+	if(IS_CULTIST_BLOOD(user))
 		user.visible_message(span_warning("[user] holds up [user.p_their()] hand, which explodes in a flash of red light!"), \
 							span_bloodcultitalic("You attempt to stun [L] with the spell!"))
 
@@ -467,10 +467,10 @@
 
 /obj/item/melee/blood_magic/teleport/afterattack(atom/target, mob/living/carbon/user, proximity)
 	var/mob/mob_target = target
-	if(istype(mob_target) && !IS_CULTIST(mob_target) || !proximity)
+	if(istype(mob_target) && !IS_CULTIST_BLOOD(mob_target) || !proximity)
 		to_chat(user, span_warning("You can only teleport adjacent cultists with this spell!"))
 		return
-	if(IS_CULTIST(user))
+	if(IS_CULTIST_BLOOD(user))
 		var/list/potential_runes = list()
 		var/list/teleportnames = list()
 		for(var/R in GLOB.teleport_runes)
@@ -513,7 +513,7 @@
 	color = "#000000" // black
 
 /obj/item/melee/blood_magic/shackles/afterattack(atom/target, mob/living/carbon/user, proximity)
-	if(IS_CULTIST(user) && iscarbon(target) && proximity)
+	if(IS_CULTIST_BLOOD(user) && iscarbon(target) && proximity)
 		var/mob/living/carbon/C = target
 		if(C.canBeHandcuffed())
 			CuffAttack(C, user)
@@ -573,7 +573,7 @@
 	Airlocks into brittle runed airlocks after a delay (harm intent)"}
 
 /obj/item/melee/blood_magic/construction/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag && IS_CULTIST(user))
+	if(proximity_flag && IS_CULTIST_BLOOD(user))
 		if(channeling)
 			to_chat(user, span_bloodcultitalic("You are already invoking twisted construction!"))
 			return
@@ -665,7 +665,7 @@
 
 /obj/item/melee/blood_magic/armor/afterattack(atom/target, mob/living/carbon/user, proximity)
 	var/mob/living/carbon/carbon_target = target
-	if(istype(carbon_target) && IS_CULTIST(carbon_target) && proximity)
+	if(istype(carbon_target) && IS_CULTIST_BLOOD(carbon_target) && proximity)
 		uses--
 		var/mob/living/carbon/C = target
 		C.visible_message(span_warning("Otherworldly armor suddenly appears on [C]!"))
@@ -695,7 +695,7 @@
 			if(NOBLOOD in H.dna.species.species_traits)
 				to_chat(user,span_warning("Blood rites do not work on species with no blood!"))
 				return
-			if(IS_CULTIST(H))
+			if(IS_CULTIST_BLOOD(H))
 				if(H.stat == DEAD)
 					to_chat(user,span_warning("Only a revive rune can bring back the dead!"))
 					return
@@ -793,7 +793,7 @@
 			uses += max(1, round(temp))
 
 /obj/item/melee/blood_magic/manipulator/attack_self(mob/living/user)
-	if(IS_CULTIST(user))
+	if(IS_CULTIST_BLOOD(user))
 		var/static/list/spells = list(
 			"Bloody Halberd (150)" = image(icon = 'icons/obj/items_and_weapons.dmi', icon_state = "occultpoleaxe0"),
 			"Blood Bolt Barrage (300)" = image(icon = 'icons/obj/guns/ballistic.dmi', icon_state = "arcane_barrage"),

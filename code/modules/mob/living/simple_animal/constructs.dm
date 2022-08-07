@@ -231,7 +231,7 @@
 	var/prev_stat
 	var/mob/living/living_target = target
 
-	if(isliving(living_target) && !IS_CULTIST(living_target))
+	if(isliving(living_target) && !IS_CULTIST_BLOOD(living_target))
 		prev_stat = living_target.stat
 
 	. = ..()

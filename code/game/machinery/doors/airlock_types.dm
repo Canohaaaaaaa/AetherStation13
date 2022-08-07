@@ -446,7 +446,7 @@
 	Cult Airlocks
 */
 
-/obj/machinery/door/airlock/cult
+/obj/machinery/door/airlock/bloodcult
 	name = "cult airlock"
 	icon = 'icons/obj/doors/airlocks/cult/runed/cult.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/cult/runed/overlays.dmi'
@@ -459,27 +459,27 @@
 	var/friendly = FALSE
 	var/stealthy = FALSE
 
-/obj/machinery/door/airlock/cult/Initialize()
+/obj/machinery/door/airlock/bloodcult/Initialize()
 	. = ..()
 	new openingoverlaytype(loc)
 
-/obj/machinery/door/airlock/cult/canAIControl(mob/user)
-	return (IS_CULTIST(user) && !isAllPowerCut())
+/obj/machinery/door/airlock/bloodcult/canAIControl(mob/user)
+	return (IS_CULTIST_BLOOD(user) && !isAllPowerCut())
 
-/obj/machinery/door/airlock/cult/on_break()
+/obj/machinery/door/airlock/bloodcult/on_break()
 	if(!panel_open)
 		panel_open = TRUE
 
-/obj/machinery/door/airlock/cult/isElectrified()
+/obj/machinery/door/airlock/bloodcult/isElectrified()
 	return FALSE
 
-/obj/machinery/door/airlock/cult/hasPower()
+/obj/machinery/door/airlock/bloodcult/hasPower()
 	return TRUE
 
-/obj/machinery/door/airlock/cult/allowed(mob/living/L)
+/obj/machinery/door/airlock/bloodcult/allowed(mob/living/L)
 	if(!density)
 		return TRUE
-	if(friendly || IS_CULTIST(L) || istype(L, /mob/living/simple_animal/shade) || isconstruct(L))
+	if(friendly || IS_CULTIST_BLOOD(L) || istype(L, /mob/living/simple_animal/shade) || isconstruct(L))
 		if(!stealthy)
 			new openingoverlaytype(loc)
 		return TRUE
@@ -494,7 +494,7 @@
 			L.throw_at(throwtarget, 5, 1,src)
 		return FALSE
 
-/obj/machinery/door/airlock/cult/proc/conceal()
+/obj/machinery/door/airlock/bloodcult/proc/conceal()
 	icon = 'icons/obj/doors/airlocks/station/maintenance.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
 	name = "airlock"
@@ -502,7 +502,7 @@
 	stealthy = TRUE
 	update_appearance()
 
-/obj/machinery/door/airlock/cult/proc/reveal()
+/obj/machinery/door/airlock/bloodcult/proc/reveal()
 	icon = initial(icon)
 	overlays_file = initial(overlays_file)
 	name = initial(name)
@@ -510,39 +510,39 @@
 	stealthy = initial(stealthy)
 	update_appearance()
 
-/obj/machinery/door/airlock/cult/narsie_act()
+/obj/machinery/door/airlock/bloodcult/narsie_act()
 	return
 
-/obj/machinery/door/airlock/cult/emp_act(severity)
+/obj/machinery/door/airlock/bloodcult/emp_act(severity)
 	return
 
-/obj/machinery/door/airlock/cult/friendly
+/obj/machinery/door/airlock/bloodcult/friendly
 	friendly = TRUE
 
-/obj/machinery/door/airlock/cult/glass
+/obj/machinery/door/airlock/bloodcult/glass
 	glass = TRUE
 	opacity = FALSE
 
-/obj/machinery/door/airlock/cult/glass/friendly
+/obj/machinery/door/airlock/bloodcult/glass/friendly
 	friendly = TRUE
 
-/obj/machinery/door/airlock/cult/unruned
+/obj/machinery/door/airlock/bloodcult/unruned
 	icon = 'icons/obj/doors/airlocks/cult/unruned/cult.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/cult/unruned/overlays.dmi'
 	assemblytype = /obj/structure/door_assembly/door_assembly_cult/unruned
 	openingoverlaytype = /obj/effect/temp_visual/bloodcult/door/unruned
 
-/obj/machinery/door/airlock/cult/unruned/friendly
+/obj/machinery/door/airlock/bloodcult/unruned/friendly
 	friendly = TRUE
 
-/obj/machinery/door/airlock/cult/unruned/glass
+/obj/machinery/door/airlock/bloodcult/unruned/glass
 	glass = TRUE
 	opacity = FALSE
 
-/obj/machinery/door/airlock/cult/unruned/glass/friendly
+/obj/machinery/door/airlock/bloodcult/unruned/glass/friendly
 	friendly = TRUE
 
-/obj/machinery/door/airlock/cult/weak
+/obj/machinery/door/airlock/bloodcult/weak
 	name = "brittle cult airlock"
 	desc = "An airlock hastily corrupted by blood magic, it is unusually brittle in this state."
 	normal_integrity = 150
