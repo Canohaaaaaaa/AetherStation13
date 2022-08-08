@@ -359,6 +359,9 @@
 /obj/vehicle/sealed/mecha/narsie_act()
 	emp_act(EMP_HEAVY)
 
+/obj/vehicle/sealed/mecha/ratvar_act()
+	emp_act(EMP_HEAVY)
+
 /obj/vehicle/sealed/mecha/do_attack_animation(atom/A, visual_effect_icon, obj/item/used_item, no_effect)
 	if(!no_effect)
 		if(selected)

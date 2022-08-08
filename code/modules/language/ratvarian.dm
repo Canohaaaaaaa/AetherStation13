@@ -94,6 +94,7 @@ List of nuances:
 	text 		= replacetext(text, 		REVERSE_RATVAR_HYPHEN_ET_MATCH,			REVERSE_RATVAR_HYPHEN_ET_REPLACEMENT)
 	return replacetext(text, 				REVERSE_RATVAR_HYPHEN_OF_MATCH,			REVERSE_RATVAR_HYPHEN_OF_REPLACEMENT)
 
+/*
 //Causes the mob or AM in question to speak a message; it assumes that the message is already translated to ratvar speech using text2ratvar()
 /proc/clockwork_say(atom/movable/AM, message, whisper=FALSE)
 	var/list/spans = list(SPAN_ROBOT)
@@ -105,4 +106,5 @@ List of nuances:
 		else
 			L.whisper(message, "clock", spans, language=/datum/language/common)
 	else
-		AM.say(message, language=/datum/language/common)
+		/AM.say(message, language=/datum/language/common)
+*/

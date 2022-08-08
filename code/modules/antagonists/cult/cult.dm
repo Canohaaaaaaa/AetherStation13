@@ -108,8 +108,6 @@
 /datum/antagonist/cult/admin_add(datum/mind/new_owner,mob/admin)
 	give_equipment = FALSE
 	new_owner.add_antag_datum(src)
-	var/datum/action/innate/cult/clockwork/debug_action = new //TODO.. remove this
-	debug_action.Grant(new_owner.current)
 	message_admins("[key_name_admin(admin)] has cult-ed [key_name_admin(new_owner)].")
 	log_admin("[key_name(admin)] has cult-ed [key_name(new_owner)].")
 

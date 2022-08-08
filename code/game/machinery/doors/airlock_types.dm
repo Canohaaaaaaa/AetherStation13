@@ -302,6 +302,10 @@
 	assemblytype = /obj/structure/door_assembly/door_assembly_clockcult/seethru
 	opacity = FALSE
 	glass = TRUE
+
+/obj/machinery/door/airlock/clockcult/ratvar_act()
+	return
+
 //////////////////////////////////
 /*
 	Station2 Airlocks
@@ -564,4 +568,7 @@
 	bound_width = 64 // 2x1
 
 /obj/machinery/door/airlock/glass_large/narsie_act()
+	return
+
+/obj/machinery/door/airlock/glass_large/ratvar_act()
 	return

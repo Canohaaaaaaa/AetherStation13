@@ -97,6 +97,18 @@
 /obj/structure/window/narsie_act()
 	add_atom_colour(NARSIE_WINDOW_COLOUR, FIXED_COLOUR_PRIORITY)
 
+/obj/structure/window/ratvar_act()
+	if(fulltile)
+		new /obj/structure/window/bronze/fulltile(loc)
+		new /obj/effect/temp_visual/clockcult/converted_window_f(loc)
+		qdel(src)
+		return
+	var/obj/structure/window/bronze/W = new(loc)
+	var/obj/effect/temp_visual/clockcult/converted_window_f/E = new(loc)
+	W.setDir(dir)
+	E.setDir(dir)
+	qdel(src)
+
 /obj/structure/window/singularity_pull(S, current_size)
 	..()
 	if(anchored && current_size >= STAGE_TWO)

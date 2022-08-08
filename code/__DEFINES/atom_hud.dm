@@ -65,10 +65,10 @@
 #define DATA_HUD_SENTIENT_DISEASE		8
 #define DATA_HUD_AI_DETECT				9
 #define DATA_HUD_FAN					10
-#define DATA_HUD_SENSORS		11
+#define DATA_HUD_SENSORS				11
 
 //antag HUD defines
-#define ANTAG_HUD_CULT			12
+#define ANTAG_HUD_CULT_BLOOD	12
 #define ANTAG_HUD_REV			13
 #define ANTAG_HUD_OPS			14
 #define ANTAG_HUD_WIZ			15
@@ -83,6 +83,7 @@
 #define ANTAG_HUD_GANGSTER		24
 #define ANTAG_HUD_SPACECOP		25
 #define ANTAG_HUD_HERETIC		26
+#define ANTAG_HUD_CULT_CLOCK	27
 
 // Notification action types
 #define NOTIFY_JUMP "jump"

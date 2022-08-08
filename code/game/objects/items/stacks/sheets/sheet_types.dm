@@ -137,6 +137,9 @@ GLOBAL_LIST_INIT(metal_recipes, list ( \
 	new /obj/item/stack/sheet/runed_metal(loc, amount)
 	qdel(src)
 
+/obj/item/stack/sheet/iron/ratvar_act()
+	new /obj/item/stack/sheet/bronze(loc, amount)
+
 /obj/item/stack/sheet/iron/fifty
 	amount = 50
 

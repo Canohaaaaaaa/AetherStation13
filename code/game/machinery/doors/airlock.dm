@@ -343,6 +343,14 @@
 		A = new /obj/machinery/door/airlock/bloodcult/weak(T)
 	qdel(src)
 
+/obj/machinery/door/airlock/ratvar_act()
+	if(glass)
+		new /obj/machinery/door/airlock/clockcult/seethru(loc)
+	else
+		new /obj/machinery/door/airlock/clockcult(loc)
+	new /obj/effect/temp_visual/clockcult/converted_door(loc)
+	qdel(src)
+
 /obj/machinery/door/airlock/Destroy()
 	QDEL_NULL(wires)
 	QDEL_NULL(electronics)

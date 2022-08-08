@@ -394,6 +394,11 @@
 		if(ismob(A) || .)
 			A.narsie_act()
 
+/turf/open/floor/carpet/ratvar_act(force, ignore_mobs, probability = 20)
+	. = ..()
+	if(.)
+		ChangeTurf(/turf/open/floor/clockcult/flat, flags = CHANGETURF_INHERIT_AIR)
+
 /turf/open/floor/carpet/break_tile()
 	broken = TRUE
 	update_appearance()

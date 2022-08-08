@@ -4,7 +4,7 @@
 	antagpanel_category = "Cult"
 	suicide_cry = "FOR NAR'SIE!!"
 	job_rank = ROLE_CULTIST
-	antag_hud_type = ANTAG_HUD_CULT
+	antag_hud_type = ANTAG_HUD_CULT_BLOOD
 	antag_hud_name = "cult"
 	greet_alert = 'sound/ambience/antag/bloodcult.ogg'
 	standard_gear = list(/obj/item/melee/cultblade/dagger)

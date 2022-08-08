@@ -144,6 +144,9 @@
 	icon_state = "clockwork_floor"
 	floor_tile = /obj/item/stack/tile/clockcult
 
+/turf/open/floor/clockcult/ratvar_act()
+	return
+
 /turf/open/floor/clockcult/flat
 	icon_state = "reebe"
 	floor_tile = /obj/item/stack/tile/clockcult/flat

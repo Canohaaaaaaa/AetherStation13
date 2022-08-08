@@ -74,6 +74,10 @@
 	W.setDir(dir)
 	qdel(src)
 
+/obj/structure/chair/ratvar_act()
+	var/obj/structure/chair/bronze/C = new(get_turf(src))
+	C.setDir(dir)
+	qdel(src)
 /obj/structure/chair/attackby(obj/item/W, mob/user, params)
 	if(flags_1 & NODECONSTRUCT_1)
 		return . = ..()

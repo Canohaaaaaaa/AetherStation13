@@ -239,6 +239,12 @@
 	if(.)
 		ChangeTurf(/turf/open/floor/engine/cult, flags = CHANGETURF_INHERIT_AIR)
 
+/turf/open/floor/ratvar_act(force, ignore_mobs, probability = 20) //TODO.. do something fancy with the tiles
+	. = ..()
+	if(.)
+		new /obj/effect/temp_visual/clockcult/converted_floor(loc)
+		ChangeTurf(/turf/open/floor/clockcult, flags = CHANGETURF_INHERIT_AIR)
+
 /turf/open/floor/acid_melt()
 	ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
 

@@ -15,7 +15,7 @@ GLOBAL_LIST_INIT(huds, list(
 	DATA_HUD_AI_DETECT = new/datum/atom_hud/ai_detector(),
 	DATA_HUD_FAN = new/datum/atom_hud/data/human/fan_hud(),
 	DATA_HUD_SENSORS = new/datum/atom_hud/data/human/medical/basic/sensors(),
-	ANTAG_HUD_CULT = new/datum/atom_hud/antag(),
+	ANTAG_HUD_CULT_BLOOD = new/datum/atom_hud/antag(),
 	ANTAG_HUD_REV = new/datum/atom_hud/antag(),
 	ANTAG_HUD_OPS = new/datum/atom_hud/antag(),
 	ANTAG_HUD_WIZ = new/datum/atom_hud/antag(),
@@ -29,7 +29,8 @@ GLOBAL_LIST_INIT(huds, list(
 	ANTAG_HUD_FUGITIVE = new/datum/atom_hud/antag(),
 	ANTAG_HUD_GANGSTER = new/datum/atom_hud/antag/hidden(),
 	ANTAG_HUD_SPACECOP = new/datum/atom_hud/antag(),
-	ANTAG_HUD_HERETIC = new/datum/atom_hud/antag/hidden()
+	ANTAG_HUD_HERETIC = new/datum/atom_hud/antag/hidden(),
+	ANTAG_HUD_CULT_CLOCK = new/datum/atom_hud/antag()
 	))
 
 /datum/atom_hud

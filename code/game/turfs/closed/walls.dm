@@ -261,6 +261,12 @@
 	if(.)
 		ChangeTurf(/turf/closed/wall/mineral/cult)
 
+/turf/closed/wall/ratvar_act(force, ignore_mobs, probability = 20)
+	. = ..()
+	if(.)
+		new /obj/effect/temp_visual/clockcult/converted_wall(loc)
+		ChangeTurf(/turf/closed/wall/mineral/clockcult)
+
 /turf/closed/wall/get_dumping_location(obj/item/storage/source, mob/user)
 	return null
 

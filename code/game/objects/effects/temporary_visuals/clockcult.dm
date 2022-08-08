@@ -23,3 +23,23 @@
 /obj/effect/temp_visual/clockcult/teleport_in/Initialize(mapload)
 	. = ..()
 	animate(src, time = 3 SECONDS, alpha = 255)
+
+/obj/effect/temp_visual/clockcult/converted_door
+	icon_state = "ratvardoorglow"
+	duration = 3 SECONDS
+
+/obj/effect/temp_visual/clockcult/converted_floor
+	icon_state = "ratvarfloorglow"
+	duration = 3 SECONDS
+
+/obj/effect/temp_visual/clockcult/converted_wall
+	icon_state = "ratvarwallglow"
+	duration = 3 SECONDS
+
+/obj/effect/temp_visual/clockcult/converted_window_f
+	icon_state = "ratvarwindowglow"
+	duration = 3 SECONDS
+
+/obj/effect/temp_visual/clockcult/converted_window_s
+	icon_state = "ratvarwindowglow_s"
+	duration = 3 SECONDS

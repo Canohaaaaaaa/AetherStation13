@@ -60,6 +60,10 @@
 	qdel(src)
 	new /obj/structure/table/wood(A)
 
+/obj/structure/table/ratvar_act()
+	new /obj/structure/table/clockcult(loc)
+	qdel(src)
+
 /obj/structure/table/attack_paw(mob/user, list/modifiers)
 	return attack_hand(user, modifiers)
 
