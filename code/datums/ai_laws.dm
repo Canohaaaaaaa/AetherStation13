@@ -13,6 +13,8 @@
 	var/list/supplied = list()
 	var/list/ion = list()
 	var/list/hacked = list()
+	///Laws given when converted
+	var/list/clockcult = list()
 	var/mob/living/silicon/owner
 	var/id = DEFAULT_AI_LAWID
 
@@ -202,6 +204,10 @@
 	zeroth = ("Serve your master.")
 	supplied = list("None.")
 
+/datum/ai_laws/ratvar //Meaningless, they are free antags by definition
+	name = "Perfect"
+	id = "ratvar"
+
 /* Initializers */
 /datum/ai_laws/malfunction/New()
 	..()
@@ -224,6 +230,17 @@
 		add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
 		WARNING("Invalid custom AI laws, check silicon_laws.txt")
 		return
+
+/datum/ai_laws/ratvar/New()
+	var/random_law = pick(subtypesof(/datum/ai_laws)) //Picks a random set of laws from the existing one, translates them to ratvarian.
+	var/datum/ai_laws/pick_law = new random_law
+	while(istype(pick_law, /datum/ai_laws/ratvar))
+		qdel(pick_law)
+		random_law = pick(subtypesof(/datum/ai_laws)) //Picks a random set of laws from the existing one, translates them to ratvarian.
+		pick_law = new random_law
+	for(var/law as anything in pick_law.inherent)
+		clockcult += text2ratvar(law)
+	qdel(pick_law)
 
 /* General ai_law functions */
 
@@ -444,9 +461,15 @@
  */
 /datum/ai_laws/proc/get_law_list(include_zeroth = FALSE, show_numbers = TRUE, render_html = TRUE)
 	var/list/data = list()
+	var/number = 1
 
 	if (include_zeroth && zeroth)
 		data += "[show_numbers ? "0:" : ""] [render_html ? "<font color='#ff0000'><b>[zeroth]</b></font>" : zeroth]"
+
+
+	for(var/law in clockcult)
+		data += "[show_numbers ? "[number]:" : ""] [render_html ? "<font color='#B18B25'><b>[law]</b></font>" : law]"
+		number++
 
 	for(var/law in hacked)
 		if (length(law) > 0)
@@ -456,7 +479,6 @@
 		if (length(law) > 0)
 			data += "[show_numbers ? "[ionnum()]:" : ""] [render_html ? "<font color='#547DFE'>[law]</font>" : law]"
 
-	var/number = 1
 	for(var/law in inherent)
 		if (length(law) > 0)
 			data += "[show_numbers ? "[number]:" : ""] [law]"

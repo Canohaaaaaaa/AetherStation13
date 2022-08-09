@@ -332,8 +332,19 @@ GLOBAL_LIST_INIT(blacklisted_borg_hats, typecacheof(list( //Hats that don't real
 		to_chat(user, span_warning("You must unexpose the wires first!"))
 		return
 
+
 	to_chat(user, span_notice("You emag [src]'s interface."))
 	emag_cooldown = world.time + 100
+
+	if(IS_CULTIST_CLOCK(src))
+		to_chat(src, span_danger("ALERT: Foreign software execution prevented."))
+		logevent("ALERT: Foreign software execution prevented.")
+		to_chat(user, span_ratvarsmall("I don't think so."))
+		log_game("[key_name(user)] attempted to emag cyborg [key_name(src)], but they were a member of the clockcult.")
+		if(isliving(user))
+			var/mob/living/living_user = user
+			living_user.electrocute_act(20, src, flags = SHOCK_NOGLOVES)
+		return
 
 	if(connected_ai && connected_ai.mind && connected_ai.mind.has_antag_datum(/datum/antagonist/malf_ai))
 		to_chat(src, span_danger("ALERT: Foreign software execution prevented."))

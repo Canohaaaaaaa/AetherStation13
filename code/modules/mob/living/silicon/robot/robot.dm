@@ -130,6 +130,13 @@
 /mob/living/silicon/robot/get_cell()
 	return cell
 
+
+/mob/living/silicon/robot/ascend()
+	clockcult_ascended = TRUE
+	icon_state = "clockwork"
+	laws = new /datum/ai_laws/ratvar
+	lamp_color = COLOR_ORANGE
+
 /mob/living/silicon/robot/proc/pick_model()
 	if(model.type != /obj/item/robot_model)
 		return

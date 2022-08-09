@@ -31,6 +31,7 @@
 	var/lawcheck[1]
 	var/ioncheck[1]
 	var/hackedcheck[1]
+	var/clockcultcheck[1]
 
 	///Are our siliconHUDs on? TRUE for yes, FALSE for no.
 	var/sensors_on = TRUE
@@ -45,6 +46,8 @@
 	var/hack_software = FALSE //Will be able to use hacking actions
 	var/interaction_range = 7 //wireless control range
 	var/obj/item/pda/ai/aiPDA
+	///Has this silicon ascended through the clockcult action
+	var/clockcult_ascended = FALSE
 
 /mob/living/silicon/Initialize()
 	. = ..()
@@ -207,6 +210,14 @@
 				hackedcheck[L] = "Yes"
 		checklaws()
 
+	if (href_list["lawcl"])
+		var/L = text2num(href_list["lawcl"])
+		switch(clockcultcheck[L])
+			if ("Yes")
+				clockcultcheck[L] = "No"
+			if ("No")
+				clockcultcheck[L] = "Yes"
+		checklaws()
 
 	if (href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
 		statelaws()
@@ -227,11 +238,12 @@
 	var/list/lawcache_ion = laws.ion.Copy()
 	var/list/lawcache_inherent = laws.inherent.Copy()
 	var/list/lawcache_supplied = laws.supplied.Copy()
+	var/list/lawcache_clockcult = laws.clockcult.Copy()
 
 	var/list/lawcache_lawcheck = lawcheck.Copy()
 	var/list/lawcache_ioncheck = ioncheck.Copy()
 	var/list/lawcache_hackedcheck = hackedcheck.Copy()
-
+	var/list/lawcache_clockcultcheck = clockcultcheck.Copy()
 	//"radiomod" is inserted before a hardcoded message to change if and how it is handled by an internal radio.
 	say("[radiomod] Current Active Laws:")
 	//laws_sanity_check()
@@ -243,6 +255,16 @@
 		if (force || lawcache_lawcheck[1] == "Yes")
 			say("[radiomod] 0. [lawcache_zeroth]")
 			sleep(10)
+
+	for (var/index in 1 to length(lawcache_clockcult))
+		var/law = lawcache_clockcult[index]
+
+		if (length(law) > 0)
+			if(lawcache_clockcultcheck.len >= number+1)
+				if (force || lawcache_clockcultcheck[number+1] == "Yes")
+					say("[radiomod] [number]. [law]", spans = list("clockcultbold"))
+					number++
+					sleep(10)
 
 	for (var/index in 1 to length(lawcache_hacked))
 		var/law = lawcache_hacked[index]
@@ -325,6 +347,15 @@
 			if (!lawcheck[number+1])
 				lawcheck[number+1] = "Yes"
 			list += {"<A href='byond://?src=[REF(src)];lawc=[number]'>[lawcheck[number+1]] [number]:</A> <font color='#990099'>[law]</font><BR>"}
+			number++
+
+	for (var/index = 1, index <= laws.clockcult.len, index++)
+		var/law = laws.clockcult[index]
+		if (length(law) > 0)
+			clockcultcheck.len += 1
+			if (!clockcultcheck[number+1])
+				clockcultcheck[number+1] = "Yes"
+			list += {"<A href='byond://?src=[REF(src)];lawcl=[number]'>[clockcultcheck[number+1]] [number]:</A> <font color='#B18B25'><b>[span_clockcultbold(law)]</b></font><BR>"}
 			number++
 	list += {"<br><br><A href='byond://?src=[REF(src)];laws=1'>State Laws</A>"}
 
@@ -443,3 +474,7 @@
 
 /mob/living/silicon/on_standing_up()
 	return // Silicons are always standing by default.
+
+/mob/living/silicon/proc/ascend()
+	clockcult_ascended = TRUE //TODO.. figure out what's a silicon and not just a pai / something meaningless to the cult?
+	return
